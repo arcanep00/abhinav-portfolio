@@ -96,7 +96,7 @@ export function Hero() {
             <a className="inline-flex items-center gap-2 hover:text-white" href={`mailto:${profile.email}`}>
               <Mail size={16} /> {profile.email}
             </a>
-            <a className="inline-flex items-center gap-2 hover:text-white" href="#">
+            <a className="inline-flex items-center gap-2 hover:text-white" href="https://github.com/arcanep00" target="_blank" rel="noopener noreferrer">
               <Github size={16} /> GitHub
             </a>
           </div>

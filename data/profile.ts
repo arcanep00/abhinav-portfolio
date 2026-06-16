@@ -47,6 +47,12 @@ export const profile = {
       value: "Ghaziabad, India",
       href: "https://maps.google.com/?q=Ghaziabad%2C%20India",
       icon: MapPin
+    },
+    {
+      label: "GitHub",
+      value: "github.com/arcanep00",
+      href: "https://github.com/arcanep00",
+      icon: GitBranch
     }
   ]
 };
