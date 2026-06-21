@@ -17,8 +17,8 @@ const config: Config = {
         goldSoft: "#f6c96f"
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["Space Grotesk", "Inter", "ui-sans-serif", "system-ui", "sans-serif"]
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-space-grotesk)", "var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"]
       },
       boxShadow: {
         glow: "0 0 50px rgba(100, 244, 172, 0.16)",

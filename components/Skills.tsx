@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { skillLevels, skills } from "@/data/profile";
+import { skillCategories, skillLevels } from "@/data/profile";
 import { fadeUp, stagger } from "@/lib/motion";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
@@ -9,10 +9,9 @@ import { Section } from "./Section";
 export function Skills() {
   return (
     <Section
-      id="skills"
       eyebrow="Skills"
-      title="Backend-first stack with enterprise application exposure."
-      description="A practical skill set for software developer, backend developer, Django developer, Python developer, and Odoo developer roles."
+      title="Python backend stack organized for engineering roles."
+      description="Languages, frameworks, databases, and core backend concepts aligned with Python Developer, Django Developer, FastAPI Developer, and REST API Engineer positions."
     >
       <motion.div
         variants={stagger}
@@ -42,6 +41,11 @@ export function Skills() {
                   viewport={{ once: true }}
                   transition={{ duration: 1.1, ease: "easeOut" }}
                   className="h-full rounded-full bg-gradient-to-r from-emeraldSoft via-cyanSoft to-goldSoft"
+                  role="progressbar"
+                  aria-valuenow={skill.level}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label={`${skill.name} proficiency`}
                 />
               </div>
             </GlassCard>
@@ -55,14 +59,14 @@ export function Skills() {
         viewport={{ once: true, amount: 0.2 }}
         className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
       >
-        {skills.map((group) => {
+        {skillCategories.map((group) => {
           const Icon = group.icon;
           return (
             <motion.div key={group.title} variants={fadeUp}>
               <GlassCard className="h-full p-6">
                 <div className="mb-5 flex items-center gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/10 text-emeraldSoft">
-                    <Icon size={21} />
+                    <Icon size={21} aria-hidden="true" />
                   </div>
                   <h3 className="font-display text-xl font-semibold text-white">{group.title}</h3>
                 </div>

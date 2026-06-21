@@ -1,25 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, Download, Github, Mail, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Download,
+  Github,
+  Mail,
+  Sparkles
+} from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/Button";
+import { siteConfig } from "@/data/navigation";
 import { profile } from "@/data/profile";
 
 const stats = [
-  ["Current", "Software Dev Intern"],
-  ["Core", "Python + Django"],
+  ["Focus", "Python Backend"],
+  ["Stack", "Django + FastAPI"],
   ["ERP", "Odoo + PostgreSQL"]
 ];
 
 export function Hero() {
   return (
-    <section
-      id="hero"
-      className="relative isolate min-h-screen overflow-hidden px-5 pb-16 pt-28 sm:px-8 lg:px-12"
-    >
+    <section className="relative isolate min-h-[calc(100vh-4rem)] overflow-hidden px-5 pb-20 pt-28 sm:px-8 lg:px-12">
       <Image
         src="/hero-backend-workspace.png"
-        alt="Dark developer workspace with code, database, and API visuals"
+        alt=""
         fill
         priority
         className="absolute inset-0 -z-20 object-cover opacity-[0.42]"
@@ -33,15 +39,22 @@ export function Hero() {
         className="absolute top-28 -z-10 h-px w-1/2 bg-gradient-to-r from-transparent via-emeraldSoft/50 to-transparent"
       />
 
-      <div className="mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-12 lg:grid-cols-[1.06fr_0.94fr]">
+      <div className="mx-auto grid min-h-[calc(100vh-8rem)] max-w-7xl items-center gap-12 lg:grid-cols-[1.06fr_0.94fr]">
         <motion.div
           initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-3xl"
         >
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emeraldSoft/30 bg-emeraldSoft/10 px-4 py-2 text-xs font-semibold text-emeraldSoft backdrop-blur">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emeraldSoft opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emeraldSoft" />
+            </span>
+            {profile.availability}
+          </div>
           <div className="mb-5 flex flex-wrap gap-2">
-            {profile.targetRoles.slice(0, 3).map((role) => (
+            {profile.heroRoles.slice(0, 4).map((role) => (
               <span
                 key={role}
                 className="rounded-md border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-slate-200 backdrop-blur"
@@ -52,31 +65,29 @@ export function Hero() {
           </div>
           <p className="font-display text-sm font-semibold uppercase tracking-[0.22em] text-emeraldSoft">
             <span className="inline-flex items-center gap-2">
-              <Sparkles size={15} /> {profile.role}
+              <Sparkles size={15} aria-hidden="true" /> {profile.role}
             </span>
           </p>
-          <h1 className="mt-5 max-w-4xl font-display text-4xl font-semibold leading-tight text-white sm:text-6xl lg:text-7xl">
-            Backend Developer for <span className="premium-text">Python, Django and Odoo ERP</span> systems.
+          <h1 className="mt-5 max-w-4xl font-display text-4xl font-semibold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
+            I build{" "}
+            <span className="premium-text">production-grade Python backend systems</span>{" "}
+            with Django, FastAPI, and REST APIs.
           </h1>
           <div className="mt-4 h-1.5 w-44 rounded-full bg-gradient-to-r from-emeraldSoft via-cyanSoft to-goldSoft shadow-glow" />
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            {profile.headline} Currently contributing as a Software Development
-            Intern with hands-on work across ERP customization, databases, APIs,
-            debugging, and feature delivery.
+            {profile.headline} Currently engineering backend solutions at{" "}
+            {profile.company} as a {profile.position}.
+          </p>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400">
+            {profile.recruiterMessage}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#projects"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-emeraldSoft px-5 py-3 text-sm font-bold text-ink transition hover:bg-white"
-            >
+            <Button href="/projects">
               View Projects <ArrowRight size={17} />
-            </a>
-            <a
-              href="/Abhinav-Pandey-Resume.pdf"
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/[0.14] bg-white/[0.08] px-5 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/[0.14]"
-            >
+            </Button>
+            <Button href={siteConfig.resumePath} variant="secondary" external>
               Resume <Download size={17} />
-            </a>
+            </Button>
           </div>
           <div className="mt-9 grid max-w-2xl gap-3 sm:grid-cols-3">
             {stats.map(([label, value], index) => (
@@ -87,17 +98,27 @@ export function Hero() {
                 transition={{ delay: 0.32 + index * 0.08, duration: 0.5 }}
                 className="rounded-lg border border-white/10 bg-white/[0.07] p-4 backdrop-blur-xl"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">{label}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  {label}
+                </p>
                 <p className="mt-2 font-display text-base font-semibold text-white">{value}</p>
               </motion.div>
             ))}
           </div>
           <div className="mt-9 flex flex-wrap gap-4 text-sm text-slate-300">
-            <a className="inline-flex items-center gap-2 hover:text-white" href={`mailto:${profile.email}`}>
-              <Mail size={16} /> {profile.email}
+            <a
+              className="inline-flex items-center gap-2 transition hover:text-white"
+              href={`mailto:${profile.email}`}
+            >
+              <Mail size={16} aria-hidden="true" /> {profile.email}
             </a>
-            <a className="inline-flex items-center gap-2 hover:text-white" href="https://github.com/arcanep00" target="_blank" rel="noopener noreferrer">
-              <Github size={16} /> GitHub
+            <a
+              className="inline-flex items-center gap-2 transition hover:text-white"
+              href="https://github.com/arcanep00"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github size={16} aria-hidden="true" /> GitHub
             </a>
           </div>
         </motion.div>
@@ -115,7 +136,7 @@ export function Hero() {
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
               className="absolute -right-7 -top-7 rounded-lg border border-emeraldSoft/20 bg-ink/80 px-4 py-3 text-sm font-semibold text-emeraldSoft shadow-glow backdrop-blur-xl"
             >
-              REST API Ready
+              REST API Engineer
             </motion.div>
             <div className="mb-5 flex items-center gap-2">
               <span className="h-3 w-3 rounded-full bg-red-400" />
@@ -123,15 +144,30 @@ export function Hero() {
               <span className="h-3 w-3 rounded-full bg-emeraldSoft" />
             </div>
             <div className="space-y-4 font-mono text-sm text-slate-300">
-              <p><span className="text-cyanSoft">role</span>: backend_developer</p>
-              <p><span className="text-cyanSoft">stack</span>: Python, Django, Odoo, PostgreSQL</p>
-              <p><span className="text-cyanSoft">focus</span>: APIs, ERP workflows, database design</p>
-              <p><span className="text-cyanSoft">status</span>: internship_experience_active</p>
+              <p>
+                <span className="text-cyanSoft">role</span>: python_backend_engineer
+              </p>
+              <p>
+                <span className="text-cyanSoft">stack</span>: Django, FastAPI, PostgreSQL, Redis
+              </p>
+              <p>
+                <span className="text-cyanSoft">focus</span>: REST APIs, ERP, database design
+              </p>
+              <p>
+                <span className="text-cyanSoft">status</span>: available_for_backend_roles
+              </p>
             </div>
             <div className="mt-6 grid gap-3">
-              {["PostgreSQL data modeling", "Odoo workflow customization", "Version-controlled delivery"].map((item) => (
-                <div key={item} className="flex items-center gap-3 rounded-md border border-white/10 bg-ink/40 px-4 py-3 text-sm text-slate-200">
-                  <CheckCircle2 size={16} className="text-emeraldSoft" />
+              {[
+                "JWT authentication & API design",
+                "PostgreSQL schema optimization",
+                "Celery background processing"
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-md border border-white/10 bg-ink/40 px-4 py-3 text-sm text-slate-200"
+                >
+                  <CheckCircle2 size={16} className="shrink-0 text-emeraldSoft" aria-hidden="true" />
                   {item}
                 </div>
               ))}

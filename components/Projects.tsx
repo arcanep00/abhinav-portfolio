@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight, ExternalLink, Github, Layers3 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
-import { projects } from "@/data/profile";
+import { projects } from "@/data/projects";
 import { fadeUp, stagger } from "@/lib/motion";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
@@ -14,10 +15,9 @@ export function Projects() {
 
   return (
     <Section
-      id="projects"
       eyebrow="Projects"
-      title="Backend projects with API, data, and authentication thinking."
-      description="Each project is positioned for recruiter review with a clear problem space, implementation features, and relevant backend technologies."
+      title="Three flagship backend systems built for production thinking."
+      description="Each project demonstrates API design, database architecture, authentication, and scalable backend patterns relevant to Python backend engineering roles."
     >
       <motion.div
         variants={fadeUp}
@@ -35,10 +35,10 @@ export function Projects() {
                 <span className="rounded-md border border-emeraldSoft/25 bg-emeraldSoft/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-emeraldSoft">
                   Featured
                 </span>
-                <Layers3 className="text-cyanSoft" size={22} />
+                <Layers3 className="text-cyanSoft" size={22} aria-hidden="true" />
               </div>
               <motion.div
-                key={activeProject.title}
+                key={activeProject.slug}
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35 }}
@@ -49,7 +49,7 @@ export function Projects() {
                 </h3>
                 <p className="mt-4 leading-8 text-slate-300">{activeProject.description}</p>
                 <div className="mt-6 inline-flex items-center gap-2 rounded-md bg-white/10 px-4 py-3 text-sm font-semibold text-white">
-                  <ArrowUpRight size={17} /> {activeProject.impact}
+                  <ArrowUpRight size={17} aria-hidden="true" /> {activeProject.impact}
                 </div>
               </motion.div>
             </div>
@@ -57,7 +57,8 @@ export function Projects() {
           <div className="grid gap-3">
             {projects.map((project, index) => (
               <button
-                key={project.title}
+                key={project.slug}
+                type="button"
                 onClick={() => setActive(index)}
                 className={`rounded-lg border p-4 text-left transition duration-300 ${
                   active === index
@@ -70,7 +71,9 @@ export function Projects() {
                     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                       {project.category}
                     </p>
-                    <p className="mt-2 font-display text-lg font-semibold text-white">{project.title}</p>
+                    <p className="mt-2 font-display text-lg font-semibold text-white">
+                      {project.title}
+                    </p>
                   </div>
                   <span className="text-sm font-bold text-emeraldSoft">0{index + 1}</span>
                 </div>
@@ -87,13 +90,13 @@ export function Projects() {
         className="grid gap-5 lg:grid-cols-3"
       >
         {projects.map((project) => (
-          <motion.article key={project.title} variants={fadeUp} whileHover={{ y: -8 }}>
+          <motion.article key={project.slug} variants={fadeUp} whileHover={{ y: -8 }}>
             <GlassCard className="flex h-full flex-col p-6">
               <div className="mb-5 flex items-center justify-between gap-4">
                 <span className="rounded-md border border-cyanSoft/20 bg-cyanSoft/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-cyanSoft">
                   {project.category}
                 </span>
-                <ArrowUpRight className="text-slate-500 transition group-hover:text-emeraldSoft" size={20} />
+                <ArrowUpRight className="text-slate-500" size={20} aria-hidden="true" />
               </div>
               <h3 className="font-display text-2xl font-semibold text-white">{project.title}</h3>
               <p className="mt-4 leading-7 text-slate-300">{project.description}</p>
@@ -102,7 +105,7 @@ export function Projects() {
                   Features
                 </p>
                 <ul className="space-y-3 text-sm leading-6 text-slate-300">
-                  {project.features.map((feature) => (
+                  {project.features.slice(0, 4).map((feature) => (
                     <li key={feature} className="flex gap-3">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyanSoft" />
                       <span>{feature}</span>
@@ -111,7 +114,7 @@ export function Projects() {
                 </ul>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
+                {project.technologies.slice(0, 5).map((tech) => (
                   <span
                     key={tech}
                     className="rounded-md border border-white/10 bg-white/[0.08] px-3 py-2 text-xs font-semibold text-slate-200"
@@ -120,19 +123,27 @@ export function Projects() {
                   </span>
                 ))}
               </div>
-              <div className="mt-auto flex gap-3 pt-7">
-                <a
-                  href={project.github}
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-white/[0.12] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              <div className="mt-auto flex flex-col gap-3 pt-7">
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-md bg-emeraldSoft px-4 py-3 text-sm font-semibold text-ink transition hover:bg-white"
                 >
-                  <Github size={16} /> GitHub
-                </a>
-                <a
-                  href={project.demo}
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-md bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:bg-emeraldSoft"
-                >
-                  <ExternalLink size={16} /> Live Demo
-                </a>
+                  Read Case Study <ArrowUpRight size={16} />
+                </Link>
+                <div className="flex gap-3">
+                  <a
+                    href={project.github}
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-white/[0.12] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                  >
+                    <Github size={16} aria-hidden="true" /> GitHub
+                  </a>
+                  <a
+                    href={project.demo}
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-white/[0.12] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                  >
+                    <ExternalLink size={16} aria-hidden="true" /> Demo
+                  </a>
+                </div>
               </div>
             </GlassCard>
           </motion.article>

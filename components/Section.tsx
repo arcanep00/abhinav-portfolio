@@ -4,16 +4,18 @@ import { motion } from "framer-motion";
 import { fadeUp } from "@/lib/motion";
 
 type SectionProps = {
-  id: string;
   eyebrow?: string;
   title: string;
   description?: string;
   children: React.ReactNode;
+  className?: string;
 };
 
-export function Section({ id, eyebrow, title, description, children }: SectionProps) {
+export function Section({ eyebrow, title, description, children, className }: SectionProps) {
   return (
-    <section id={id} className="relative px-5 py-[4.5rem] sm:px-8 lg:px-12 lg:py-28">
+    <section
+      className={`relative px-5 pb-16 pt-28 sm:px-8 lg:px-12 lg:pb-24 lg:pt-32 ${className ?? ""}`}
+    >
       <div className="mx-auto max-w-7xl">
         <motion.div
           variants={fadeUp}

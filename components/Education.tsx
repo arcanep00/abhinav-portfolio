@@ -11,9 +11,9 @@ export function Education() {
 
   return (
     <Section
-      id="education"
       eyebrow="Education"
       title="Computer Science foundation supporting backend engineering."
+      description="B.Tech in Computer Science Engineering with coursework directly applicable to backend systems, databases, and software architecture."
     >
       <motion.div
         variants={fadeUp}
@@ -26,7 +26,7 @@ export function Education() {
           <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
             <div className="flex gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-cyanSoft/[0.12] text-cyanSoft">
-                <Icon size={24} />
+                <Icon size={24} aria-hidden="true" />
               </div>
               <div>
                 <h3 className="font-display text-2xl font-semibold text-white">{education.degree}</h3>
@@ -35,7 +35,7 @@ export function Education() {
                 </p>
               </div>
             </div>
-            <span className="rounded-md border border-white/[0.12] px-4 py-2 text-sm font-semibold text-white">
+            <span className="shrink-0 rounded-md border border-white/[0.12] px-4 py-2 text-sm font-semibold text-white">
               {education.period}
             </span>
           </div>

@@ -1,5 +1,4 @@
 import {
-  Award,
   Briefcase,
   Code2,
   Database,
@@ -9,26 +8,47 @@ import {
   MapPin,
   Phone,
   ServerCog,
-  SquareTerminal
+  Shield,
+  Workflow,
+  Zap
 } from "lucide-react";
 
 export const profile = {
   name: "Abhinav Pandey",
-  role: "Early-Career Software Engineer",
+  role: "Python Backend Engineer",
   headline:
-    "Backend-focused developer building Python, Django, Odoo ERP, PostgreSQL, and REST API solutions.",
+    "Building production-grade REST APIs, Django and FastAPI services, PostgreSQL data layers, and Odoo ERP integrations.",
   location: "Ghaziabad, Uttar Pradesh, India",
   email: "panabhi8456@gmail.com",
   phone: "+91 89796 10223",
+  company: "Etelligense Technology",
+  position: "Software Development Intern",
+  availability: "Open to Python Backend roles",
   targetRoles: [
-    "Software Developer",
-    "Backend Developer",
+    "Python Backend Engineer",
     "Django Developer",
-    "Python Developer",
-    "Odoo Developer"
+    "FastAPI Developer",
+    "REST API Engineer",
+    "Odoo ERP Developer",
+    "Backend System Engineer"
+  ],
+  heroRoles: [
+    "Python Backend Engineer",
+    "Django Developer",
+    "FastAPI Developer",
+    "REST API Engineer",
+    "Odoo ERP Developer",
+    "Backend System Engineer"
   ],
   summary:
-    "I am an early-career software engineer with real-world internship experience in backend development and ERP customization. My current work at Etelligense Technology gives me hands-on exposure to Odoo, Python, Django, PostgreSQL, REST APIs, Linux, Git, and GitHub. I enjoy designing reliable data models, building API-driven features, debugging production-style workflows, and turning business requirements into maintainable software.",
+    "I am a Python backend engineer focused on designing reliable APIs, scalable data models, and maintainable server-side systems. Through my internship at Etelligense Technology, I work across Django, FastAPI, Odoo ERP, PostgreSQL, Redis, and REST API development — translating business requirements into production-ready backend software. I prioritize clean architecture, database design, authentication patterns, and debugging discipline over surface-level feature delivery.",
+  aboutParagraphs: [
+    "My engineering work centers on the Python ecosystem — Django and Django REST Framework for structured enterprise APIs, FastAPI for high-performance async services, and Odoo ERP for business workflow customization.",
+    "I design PostgreSQL schemas with normalization, indexing, and query optimization in mind. Authentication flows, serializer validation, background processing, and caching strategies are core to how I approach backend systems.",
+    "Whether building healthcare APIs, financial processing pipelines, or marketplace platforms, I focus on problem decomposition, API contract clarity, and code that teams can extend without rework."
+  ],
+  recruiterMessage:
+    "Hiring for Python backend, Django, FastAPI, REST API, or Odoo ERP roles? I bring hands-on internship experience, three flagship backend projects, and a focus on production engineering practices.",
   contactLinks: [
     {
       label: "Email",
@@ -62,144 +82,100 @@ export const experience = [
     role: "Software Development Intern",
     company: "Etelligense Technology",
     location: "Greater Noida West",
-    period: "Jan 2026 - Present",
+    period: "Jan 2026 — Present",
+    summary:
+      "Contributing to backend-driven applications and Odoo ERP customization in a production-oriented internship environment.",
     highlights: [
-      "Developing and maintaining backend-driven web applications using Python, Django, SQL, and Odoo.",
-      "Customizing Odoo ERP modules, workflows, reports, and business processes for practical enterprise use cases.",
-      "Working with PostgreSQL for database design, data modeling, query writing, and performance-minded improvements.",
-      "Building and integrating REST APIs to connect application features with structured backend services.",
-      "Collaborating on debugging, testing, feature implementation, and Git/GitHub-based version control."
+      "Engineered backend features using Python and Django, integrating REST APIs with PostgreSQL-backed data models for enterprise workflows.",
+      "Customized Odoo ERP modules, reports, and business processes — bridging Python backend logic with real operational requirements.",
+      "Designed and optimized PostgreSQL queries, improving data retrieval patterns for ERP-backed features and API endpoints.",
+      "Built and consumed REST APIs with structured validation, error handling, and authentication-aware endpoint design.",
+      "Applied Linux environment practices, Git/GitHub workflows, debugging techniques, and testing discipline across feature delivery cycles.",
+      "Collaborated on FastAPI-oriented service thinking and background processing patterns for scalable backend architecture."
+    ],
+    technologies: [
+      "Python",
+      "Django",
+      "FastAPI",
+      "Odoo ERP",
+      "PostgreSQL",
+      "REST APIs",
+      "Linux",
+      "Git",
+      "Testing"
     ]
   }
 ];
 
-export const skills = [
+export const skillCategories = [
   {
-    title: "Backend Engineering",
-    icon: ServerCog,
-    items: ["Python", "Django", "REST APIs", "SQL", "API Development"]
-  },
-  {
-    title: "ERP & Business Apps",
-    icon: Briefcase,
-    items: ["Odoo ERP", "Module Customization", "Workflows", "Reports"]
-  },
-  {
-    title: "Database",
-    icon: Database,
-    items: ["PostgreSQL", "Data Modeling", "Query Optimization", "DBMS"]
-  },
-  {
-    title: "Programming",
+    title: "Languages",
     icon: Code2,
-    items: ["Java", "Python", "JavaScript", "Object-Oriented Programming"]
+    items: ["Python", "SQL", "JavaScript"]
   },
   {
-    title: "Frontend Basics",
-    icon: SquareTerminal,
-    items: ["HTML5", "CSS3", "JavaScript", "Responsive UI"]
+    title: "Backend",
+    icon: ServerCog,
+    items: ["Django", "FastAPI", "REST APIs", "Odoo ERP"]
   },
   {
-    title: "Tools & Platforms",
+    title: "Databases",
+    icon: Database,
+    items: ["PostgreSQL", "Redis"]
+  },
+  {
+    title: "Developer Tools",
     icon: GitBranch,
-    items: ["Git", "GitHub", "Linux", "VS Code", "Version Control"]
+    items: ["Docker", "Git", "GitHub", "Linux"]
+  },
+  {
+    title: "Core Concepts",
+    icon: Zap,
+    items: [
+      "Authentication",
+      "API Design",
+      "Database Design",
+      "Caching",
+      "Background Processing"
+    ]
   }
 ];
 
 export const skillLevels = [
-  { name: "Python", level: 88, category: "Backend" },
-  { name: "Django", level: 82, category: "Framework" },
-  { name: "Odoo ERP", level: 78, category: "ERP" },
-  { name: "PostgreSQL", level: 76, category: "Database" },
-  { name: "REST APIs", level: 84, category: "API" },
-  { name: "Git/GitHub", level: 80, category: "Tools" }
-];
-
-export const projects = [
-  {
-    title: "Task Management & Resource API",
-    category: "Backend API",
-    impact: "Auth + relational data",
-    description:
-      "Backend API for academic task and resource management, designed around structured data, secure access, and clean service boundaries.",
-    features: [
-      "Relational database architecture for tasks, users, and resources",
-      "Authentication and authorization flows",
-      "Backend endpoints prepared for practical task/resource workflows"
-    ],
-    technologies: ["Python", "Django", "REST APIs", "SQL", "Authentication"],
-    github: "#",
-    demo: "#"
-  },
-  {
-    title: "Intelligent URL Shortener & Analytics",
-    category: "Analytics Platform",
-    impact: "Tracking + custom slugs",
-    description:
-      "URL shortening platform with custom slug generation and analytics support for tracking click activity and usage patterns.",
-    features: [
-      "Custom short-link generation logic",
-      "Click activity and usage statistics",
-      "Data-backed analytics layer for shortened URLs"
-    ],
-    technologies: ["Python", "Django", "PostgreSQL", "REST APIs", "Analytics"],
-    github: "#",
-    demo: "#"
-  },
-  {
-    title: "DevConnect API",
-    category: "Developer Platform",
-    impact: "Collaboration services",
-    description:
-      "API services for developer collaboration, focused on backend fundamentals, clean endpoints, and scalable service thinking.",
-    features: [
-      "Developer collaboration service endpoints",
-      "API-first backend structure",
-      "Foundation for profiles, connections, and shared developer resources"
-    ],
-    technologies: ["Python", "Django", "REST APIs", "SQL", "Backend Design"],
-    github: "#",
-    demo: "#"
-  }
+  { name: "Python", level: 90, category: "Language" },
+  { name: "Django", level: 85, category: "Backend" },
+  { name: "FastAPI", level: 82, category: "Backend" },
+  { name: "REST APIs", level: 88, category: "API Design" },
+  { name: "PostgreSQL", level: 84, category: "Database" },
+  { name: "Odoo ERP", level: 80, category: "ERP" }
 ];
 
 export const education = {
-  degree: "Bachelor of Technology (B.Tech), Computer Science",
-  institute: "ABES Institute of Technology (ABESIT)",
+  degree: "Bachelor of Technology — Computer Science Engineering",
+  institute: "ABES Institute of Technology",
   location: "Ghaziabad",
-  period: "2023 - 2027",
+  period: "2023 — 2027",
   coursework: [
     "Data Structures & Algorithms",
-    "Object-Oriented Programming",
     "Database Management Systems",
+    "Object-Oriented Programming",
     "Operating Systems",
-    "Web Development"
+    "Software Engineering",
+    "Computer Networks"
   ],
   icon: GraduationCap
 };
 
-export const achievements = [
-  {
-    title: "Real-World Software Development Exposure",
-    description:
-      "Gaining practical engineering experience through an active software development internship involving backend applications, ERP customization, databases, and APIs.",
-    icon: Award
-  },
-  {
-    title: "Backend and ERP Specialization",
-    description:
-      "Built a focused profile around Python, Django, Odoo ERP, PostgreSQL, REST APIs, and enterprise application development."
-  },
-  {
-    title: "Strong Computer Science Foundation",
-    description:
-      "Developed fundamentals in DSA, OOP, DBMS, operating systems, web development, and version-controlled team workflows."
-  }
+export const odooHighlights = [
+  "Customized Odoo ERP modules aligned with enterprise business workflow requirements.",
+  "Built Python and SQL-backed report and workflow improvements for operational teams.",
+  "Integrated PostgreSQL data models with Odoo ORM patterns for reliable feature delivery.",
+  "Applied debugging, testing, and incremental deployment practices within ERP customization cycles."
 ];
 
-export const odooHighlights = [
-  "Odoo ERP module customization aligned with business workflow requirements.",
-  "Report and workflow improvements for enterprise-style ERP operations.",
-  "Python, SQL, and PostgreSQL usage across ERP-backed feature development.",
-  "Debugging, testing, and incremental feature delivery within an internship environment."
+export const odooCapabilities = [
+  { label: "Module Customization", icon: Briefcase },
+  { label: "Workflow Automation", icon: Workflow },
+  { label: "Report Development", icon: Database },
+  { label: "PostgreSQL Integration", icon: Shield }
 ];
