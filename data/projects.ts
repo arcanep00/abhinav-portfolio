@@ -52,12 +52,12 @@ export const projects: Project[] = [
       "Error Handling",
       "Secure Backend Architecture"
     ],
-    github: "#",
-    demo: "#",
+    github: "https://github.com/arcanep00/healthcare-backend",
+    demo: "https://healthcare-backend-mbtu.onrender.com",
     sections: [
       {
-        id: "https://github.com/arcanep00/healthcare-backend",
-        title: "https://healthcare-backend-mbtu.onrender.com",
+        id: "overview",
+        title: "overview",
         content:
           "A production-oriented healthcare backend API designed to manage patients, doctors, and their relationships through secure REST endpoints. Built with Django REST Framework, the system emphasizes authentication, data integrity, and scalable API design patterns suitable for enterprise healthcare workflows."
       },
@@ -212,7 +212,7 @@ PatientDoctorMapping (id, patient_id FK, doctor_id FK, assigned_at, status)`
       "Analytics Dashboard",
       "Scalable Architecture"
     ],
-    github: "#",
+    github: "https://github.com/arcanep00/Docker_LLM_Project",
     demo: "#",
     sections: [
       {
@@ -366,7 +366,7 @@ Report (id, batch_id FK, summary_json, generated_at)`
       "Future Payment Integration"
     ],
     github: "#",
-    demo: "#",
+    demo: "https://www.serviqapp.com",
     sections: [
       {
         id: "overview",
