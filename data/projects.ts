@@ -56,8 +56,8 @@ export const projects: Project[] = [
     demo: "#",
     sections: [
       {
-        id: "overview",
-        title: "Overview",
+        id: "https://github.com/arcanep00/healthcare-backend",
+        title: "https://healthcare-backend-mbtu.onrender.com",
         content:
           "A production-oriented healthcare backend API designed to manage patients, doctors, and their relationships through secure REST endpoints. Built with Django REST Framework, the system emphasizes authentication, data integrity, and scalable API design patterns suitable for enterprise healthcare workflows."
       },
