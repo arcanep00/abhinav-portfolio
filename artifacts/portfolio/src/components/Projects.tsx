@@ -1,13 +1,52 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
 import { ArrowUpRight, ExternalLink, Github, Layers3 } from "lucide-react";
 import { Link } from "wouter";
-import { useState } from "react";
+import { motion } from "framer-motion";
 import { projects } from "@/data/projects";
 import { fadeUp, stagger } from "@/lib/motion";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
+
+const MAX_TILT = 8;
+
+function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotX = -((y - cy) / cy) * MAX_TILT;
+    const rotY = ((x - cx) / cx) * MAX_TILT;
+    card.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`;
+    card.style.transition = "transform 0.08s ease";
+  }
+
+  function handleMouseLeave() {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)";
+    card.style.transition = "transform 0.45s ease";
+  }
+
+  return (
+    <div
+      ref={cardRef}
+      className={className}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ willChange: "transform" }}
+    >
+      {children}
+    </div>
+  );
+}
 
 export function Projects() {
   const [active, setActive] = useState(0);
@@ -82,6 +121,7 @@ export function Projects() {
           </div>
         </GlassCard>
       </motion.div>
+
       <motion.div
         variants={stagger}
         initial="hidden"
@@ -90,62 +130,64 @@ export function Projects() {
         className="grid gap-5 lg:grid-cols-3"
       >
         {projects.map((project) => (
-          <motion.article key={project.slug} variants={fadeUp} whileHover={{ y: -8 }}>
-            <GlassCard className="flex h-full flex-col p-6">
-              <div className="mb-5 flex items-center justify-between gap-4">
-                <span className="rounded-md border border-cyanSoft/20 bg-cyanSoft/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-cyanSoft">
-                  {project.category}
-                </span>
-                <ArrowUpRight className="text-slate-500" size={20} aria-hidden="true" />
-              </div>
-              <h3 className="font-display text-2xl font-semibold text-white">{project.title}</h3>
-              <p className="mt-4 leading-7 text-slate-300">{project.description}</p>
-              <div className="mt-6">
-                <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-emeraldSoft">
-                  Features
-                </p>
-                <ul className="space-y-3 text-sm leading-6 text-slate-300">
-                  {project.features.slice(0, 4).map((feature) => (
-                    <li key={feature} className="flex gap-3">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyanSoft" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {project.technologies.slice(0, 5).map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-md border border-white/10 bg-white/[0.08] px-3 py-2 text-xs font-semibold text-slate-200"
-                  >
-                    {tech}
+          <motion.article key={project.slug} variants={fadeUp}>
+            <TiltCard className="h-full">
+              <GlassCard className="flex h-full flex-col p-6">
+                <div className="mb-5 flex items-center justify-between gap-4">
+                  <span className="rounded-md border border-cyanSoft/20 bg-cyanSoft/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-cyanSoft">
+                    {project.category}
                   </span>
-                ))}
-              </div>
-              <div className="mt-auto flex flex-col gap-3 pt-7">
-                <Link
-                  href={`/projects/${project.slug}`}
-                  className="inline-flex items-center justify-center gap-2 rounded-md bg-emeraldSoft px-4 py-3 text-sm font-semibold text-ink transition hover:bg-white"
-                >
-                  Read Case Study <ArrowUpRight size={16} />
-                </Link>
-                <div className="flex gap-3">
-                  <a
-                    href={project.github}
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-white/[0.12] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-                  >
-                    <Github size={16} aria-hidden="true" /> GitHub
-                  </a>
-                  <a
-                    href={project.demo}
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-white/[0.12] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-                  >
-                    <ExternalLink size={16} aria-hidden="true" /> Demo
-                  </a>
+                  <ArrowUpRight className="text-slate-500" size={20} aria-hidden="true" />
                 </div>
-              </div>
-            </GlassCard>
+                <h3 className="font-display text-2xl font-semibold text-white">{project.title}</h3>
+                <p className="mt-4 leading-7 text-slate-300">{project.description}</p>
+                <div className="mt-6">
+                  <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-emeraldSoft">
+                    Features
+                  </p>
+                  <ul className="space-y-3 text-sm leading-6 text-slate-300">
+                    {project.features.slice(0, 4).map((feature) => (
+                      <li key={feature} className="flex gap-3">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyanSoft" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {project.technologies.slice(0, 5).map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-md border border-white/10 bg-white/[0.08] px-3 py-2 text-xs font-semibold text-slate-200"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-auto flex flex-col gap-3 pt-7">
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-md bg-emeraldSoft px-4 py-3 text-sm font-semibold text-ink transition hover:bg-white"
+                  >
+                    Read Case Study <ArrowUpRight size={16} />
+                  </Link>
+                  <div className="flex gap-3">
+                    <a
+                      href={project.github}
+                      className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-white/[0.12] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                    >
+                      <Github size={16} aria-hidden="true" /> GitHub
+                    </a>
+                    <a
+                      href={project.demo}
+                      className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-white/[0.12] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                    >
+                      <ExternalLink size={16} aria-hidden="true" /> Demo
+                    </a>
+                  </div>
+                </div>
+              </GlassCard>
+            </TiltCard>
           </motion.article>
         ))}
       </motion.div>

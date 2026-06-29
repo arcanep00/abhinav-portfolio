@@ -29,7 +29,6 @@ export const profile = {
     "Django Developer",
     "FastAPI Developer",
     "REST API Engineer",
-    "Odoo ERP Developer",
     "Backend System Engineer"
   ],
   heroRoles: [
@@ -43,7 +42,7 @@ export const profile = {
   summary:
     "I am a Python backend engineer focused on designing reliable APIs, scalable data models, and maintainable server-side systems. Through my internship at Etelligense Technology, I work across Django, FastAPI, Odoo ERP, PostgreSQL, Redis, and REST API development — translating business requirements into production-ready backend software. I prioritize clean architecture, database design, authentication patterns, and debugging discipline over surface-level feature delivery.",
   aboutParagraphs: [
-    "My engineering work centers on the Python ecosystem — Django and Django REST Framework for structured enterprise APIs, FastAPI for high-performance async services, and Odoo ERP for business workflow customization.",
+    "My engineering work centers on the Python ecosystem — Django and Django REST Framework for structured enterprise APIs, and FastAPI for high-performance async services.",
     "I design PostgreSQL schemas with normalization, indexing, and query optimization in mind. Authentication flows, serializer validation, background processing, and caching strategies are core to how I approach backend systems.",
     "Whether building healthcare APIs, financial processing pipelines, or marketplace platforms, I focus on problem decomposition, API contract clarity, and code that teams can extend without rework."
   ],

@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { skillCategories, skillLevels } from "@/data/profile";
-import { fadeUp, stagger } from "@/lib/motion";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
 
@@ -15,22 +14,89 @@ const filteredCategories = skillCategories.map((group) => ({
   items: group.items.filter((item) => !ODOO_ITEMS.includes(item))
 }));
 
+function useScrollReveal(staggerMs = 100) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const cards = Array.from(container.querySelectorAll<HTMLElement>("[data-reveal]"));
+    cards.forEach((card, i) => {
+      card.style.opacity = "0";
+      card.style.transform = "translateY(40px)";
+      card.style.transition = `opacity 0.55s ease ${i * staggerMs}ms, transform 0.55s ease ${i * staggerMs}ms`;
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).style.opacity = "1";
+            (entry.target as HTMLElement).style.transform = "translateY(0)";
+          }
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, [staggerMs]);
+
+  return containerRef;
+}
+
+function ProgressBar({ level }: { level: number }) {
+  const barRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
+    bar.style.width = "0%";
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          bar.style.transition = "width 1.1s ease";
+          bar.style.width = `${level}%`;
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(bar);
+    return () => observer.disconnect();
+  }, [level]);
+
+  return (
+    <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
+      <div
+        ref={barRef}
+        className="h-full rounded-full"
+        style={{ background: "linear-gradient(to right, #00ff9d, #00f5ff, #a78bfa)" }}
+        role="progressbar"
+        aria-valuenow={level}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`${level}% proficiency`}
+      />
+    </div>
+  );
+}
+
 export function Skills() {
+  const levelRef = useScrollReveal(80);
+  const catRef = useScrollReveal(90);
+
   return (
     <Section
       eyebrow="Skills"
       title="Python backend stack organized for engineering roles."
       description="Languages, frameworks, databases, and core backend concepts aligned with Python Developer, Django Developer, FastAPI Developer, and REST API Engineer positions."
     >
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.25 }}
-        className="mb-8 grid gap-4 lg:grid-cols-2"
-      >
+      <div ref={levelRef} className="mb-8 grid gap-4 lg:grid-cols-2">
         {filteredSkillLevels.map((skill) => (
-          <motion.div key={skill.name} variants={fadeUp}>
+          <div key={skill.name} data-reveal>
             <GlassCard className="p-5">
               <div className="mb-3 flex items-center justify-between gap-4">
                 <div>
@@ -46,37 +112,17 @@ export function Skills() {
                   {skill.level}%
                 </span>
               </div>
-              <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
-                <motion.div
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${skill.level}%` }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.1, ease: "easeOut" }}
-                  className="h-full rounded-full"
-                  style={{ background: "linear-gradient(to right, #00ff9d, #00f5ff, #a78bfa)" }}
-                  role="progressbar"
-                  aria-valuenow={skill.level}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-label={`${skill.name} proficiency`}
-                />
-              </div>
+              <ProgressBar level={skill.level} />
             </GlassCard>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
 
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.2 }}
-        className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
-      >
+      <div ref={catRef} className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {filteredCategories.map((group) => {
           const Icon = group.icon;
           return (
-            <motion.div key={group.title} variants={fadeUp}>
+            <div key={group.title} data-reveal>
               <GlassCard className="h-full p-6">
                 <div className="mb-5 flex items-center gap-3">
                   <div
@@ -99,18 +145,14 @@ export function Skills() {
                   ))}
                 </div>
               </GlassCard>
-            </motion.div>
+            </div>
           );
         })}
-      </motion.div>
+      </div>
 
-      <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true }}
-        transition={{ delay: 0.2 }}
+      <div
         className="mt-8 flex flex-wrap items-center gap-3"
+        style={{ opacity: 0.6 }}
       >
         <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
           Also worked with
@@ -124,7 +166,7 @@ export function Skills() {
             {item}
           </span>
         ))}
-      </motion.div>
+      </div>
     </Section>
   );
 }
