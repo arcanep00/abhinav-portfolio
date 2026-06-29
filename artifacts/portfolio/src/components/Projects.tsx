@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ExternalLink, Github, Layers3 } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
@@ -10,6 +10,89 @@ import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
 
 const STAGGER = ["", "stagger-1", "stagger-2", "stagger-3"];
+
+function FloatingOctahedron() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef(0);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const S = 120;
+    canvas.width = S;
+    canvas.height = S;
+
+    const R = 36;
+    const verts: [number, number, number][] = [
+      [0, -R, 0], [0, R, 0],
+      [R, 0, 0],  [-R, 0, 0],
+      [0, 0, R],  [0, 0, -R],
+    ];
+    const edges: [number, number][] = [
+      [0,2],[0,3],[0,4],[0,5],
+      [1,2],[1,3],[1,4],[1,5],
+      [2,4],[4,3],[3,5],[5,2],
+    ];
+
+    let yaw = 0;
+
+    function rotY(v: [number,number,number], a: number): [number,number,number] {
+      return [v[0]*Math.cos(a)+v[2]*Math.sin(a), v[1], -v[0]*Math.sin(a)+v[2]*Math.cos(a)];
+    }
+    function rotX(v: [number,number,number], a: number): [number,number,number] {
+      return [v[0], v[1]*Math.cos(a)-v[2]*Math.sin(a), v[1]*Math.sin(a)+v[2]*Math.cos(a)];
+    }
+    function proj(v: [number,number,number]) {
+      const fov = 200;
+      const sc = fov / (fov + v[2]);
+      return { x: S/2 + v[0]*sc, y: S/2 + v[1]*sc, z: v[2] };
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, S, S);
+
+      const projected = verts.map(v => proj(rotX(rotY(v, yaw), yaw * 0.4)));
+
+      for (const [a, b] of edges) {
+        const pa = projected[a];
+        const pb = projected[b];
+        const avgZ = (pa.z + pb.z) / 2;
+        const alpha = Math.max(0.08, (avgZ / R + 1) / 2) * 0.85;
+        ctx.beginPath();
+        ctx.moveTo(pa.x, pa.y);
+        ctx.lineTo(pb.x, pb.y);
+        ctx.strokeStyle = `rgba(0,255,157,${alpha.toFixed(2)})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+
+      for (const { x, y, z } of projected) {
+        const alpha = Math.max(0.2, (z / R + 1) / 2);
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0,255,157,${alpha.toFixed(2)})`;
+        ctx.fill();
+      }
+
+      yaw += 0.012;
+      rafRef.current = requestAnimationFrame(draw);
+    }
+
+    draw();
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ filter: "drop-shadow(0 0 12px rgba(0,255,157,0.45))", display: "block" }}
+      aria-hidden="true"
+    />
+  );
+}
 
 export function Projects() {
   const [active, setActive] = useState(0);
@@ -124,6 +207,35 @@ export function Projects() {
             </GlassCard>
           </div>
         ))}
+      </div>
+
+      {/* ── Closing CTA ─────────────────────────────────────────── */}
+      <div className="animate-on-scroll mt-16 flex flex-col items-center gap-6 text-center">
+        <div className="relative flex items-center justify-center">
+          <div className="absolute opacity-60">
+            <FloatingOctahedron />
+          </div>
+          <div className="relative z-10 flex flex-col items-center gap-4 pt-16">
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.22em] text-[#00ff9d]">
+              // more work
+            </p>
+            <h3 className="font-display text-2xl font-bold text-white sm:text-3xl">
+              Want to see more?
+            </h3>
+            <p className="max-w-md text-slate-400 leading-7">
+              More projects, experiments, and open-source contributions are available on GitHub.
+            </p>
+            <a
+              href="https://github.com/arcanep00"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center gap-2 rounded-md border border-[#00ff9d]/40 bg-[#00ff9d]/10 px-6 py-3 text-sm font-semibold text-[#00ff9d] transition duration-200 hover:bg-[#00ff9d]/20 hover:border-[#00ff9d]/70"
+            >
+              <Github size={16} aria-hidden="true" />
+              View GitHub Profile ↗
+            </a>
+          </div>
+        </div>
       </div>
     </Section>
   );
