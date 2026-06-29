@@ -1,119 +1,143 @@
-import { useEffect, useRef } from "react";
+import { useRef, useMemo, useEffect, Suspense } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three";
+import { WebGLErrorBoundary } from "./WebGLErrorBoundary";
+import { NeuralCanvas2D } from "./NeuralCanvas2D";
 
-const NODE_COUNT = 90;
-const CONNECTION_DIST = 160;
+const NODE_COUNT = 150;
+const MAX_CONNECTIONS = 160;
 
-interface Node {
-  x: number; y: number;
-  vx: number; vy: number;
+function Particles() {
+  const ref = useRef<THREE.Points>(null);
+  const mouse = useRef(new THREE.Vector2(0, 0));
+  const { size } = useThree();
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouse.current.set(
+        (e.clientX / window.innerWidth) * 2 - 1,
+        -((e.clientY / window.innerHeight) * 2 - 1)
+      );
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  const { positions, velocities } = useMemo(() => {
+    const positions = new Float32Array(NODE_COUNT * 3);
+    const velocities: THREE.Vector3[] = [];
+    const w = Math.min(size.width / 100, 10);
+    const h = Math.min(size.height / 100, 6);
+    for (let i = 0; i < NODE_COUNT; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * w * 2;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * h * 2;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 3;
+      velocities.push(new THREE.Vector3(
+        (Math.random() - 0.5) * 0.005,
+        (Math.random() - 0.5) * 0.005,
+        (Math.random() - 0.5) * 0.002
+      ));
+    }
+    return { positions, velocities };
+  }, [size.width, size.height]);
+
+  useFrame(() => {
+    const pts = ref.current;
+    if (!pts) return;
+    const arr = pts.geometry.attributes.position.array as Float32Array;
+    for (let i = 0; i < NODE_COUNT; i++) {
+      arr[i * 3] += velocities[i].x + mouse.current.x * 0.001;
+      arr[i * 3 + 1] += velocities[i].y + mouse.current.y * 0.001;
+      arr[i * 3 + 2] += velocities[i].z;
+      if (Math.abs(arr[i * 3]) > 12) velocities[i].x *= -1;
+      if (Math.abs(arr[i * 3 + 1]) > 8) velocities[i].y *= -1;
+      if (Math.abs(arr[i * 3 + 2]) > 3) velocities[i].z *= -1;
+    }
+    pts.geometry.attributes.position.needsUpdate = true;
+  });
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+      </bufferGeometry>
+      <pointsMaterial size={0.05} color="#00ff9d" transparent opacity={0.9} sizeAttenuation />
+    </points>
+  );
+}
+
+function Lines() {
+  const ref = useRef<THREE.LineSegments>(null);
+  const { size } = useThree();
+  const time = useRef(0);
+
+  const nodePos = useMemo(() => {
+    const arr: number[] = [];
+    const w = Math.min(size.width / 100, 10);
+    const h = Math.min(size.height / 100, 6);
+    for (let i = 0; i < NODE_COUNT; i++) {
+      arr.push(
+        (Math.random() - 0.5) * w * 2,
+        (Math.random() - 0.5) * h * 2,
+        (Math.random() - 0.5) * 3
+      );
+    }
+    return arr;
+  }, [size.width, size.height]);
+
+  useFrame((_, delta) => {
+    time.current += delta * 0.15;
+    const seg = ref.current;
+    if (!seg) return;
+    for (let i = 0; i < NODE_COUNT; i++) {
+      nodePos[i * 3] += Math.sin(time.current + i * 0.3) * 0.003;
+      nodePos[i * 3 + 1] += Math.cos(time.current + i * 0.5) * 0.003;
+    }
+    const pts: number[] = [];
+    for (let i = 0; i < NODE_COUNT; i++) {
+      for (let j = i + 1; j < NODE_COUNT; j++) {
+        const dx = nodePos[i * 3] - nodePos[j * 3];
+        const dy = nodePos[i * 3 + 1] - nodePos[j * 3 + 1];
+        const dz = nodePos[i * 3 + 2] - nodePos[j * 3 + 2];
+        if (dx * dx + dy * dy + dz * dz < MAX_CONNECTIONS * 0.05) {
+          pts.push(nodePos[i*3], nodePos[i*3+1], nodePos[i*3+2],
+                   nodePos[j*3], nodePos[j*3+1], nodePos[j*3+2]);
+        }
+      }
+    }
+    seg.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(pts), 3));
+    seg.geometry.attributes.position.needsUpdate = true;
+  });
+
+  return (
+    <lineSegments ref={ref}>
+      <bufferGeometry />
+      <lineBasicMaterial color="#00ff9d" transparent opacity={0.12} />
+    </lineSegments>
+  );
+}
+
+function ThreeScene() {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 7], fov: 65 }}
+      gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
+      style={{ background: "transparent" }}
+    >
+      <Suspense fallback={null}>
+        <Particles />
+        <Lines />
+      </Suspense>
+    </Canvas>
+  );
 }
 
 export function NeuralBackground() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouse = useRef({ x: -9999, y: -9999 });
-  const nodesRef = useRef<Node[]>([]);
-  const rafRef = useRef<number>(0);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      nodesRef.current = Array.from({ length: NODE_COUNT }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.55,
-        vy: (Math.random() - 0.5) * 0.55
-      }));
-    };
-
-    const onMouse = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      mouse.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    };
-
-    resize();
-    window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", onMouse);
-    window.addEventListener("touchmove", onTouchMove, { passive: true });
-
-    const draw = () => {
-      const { width, height } = canvas;
-      ctx.clearRect(0, 0, width, height);
-
-      const nodes = nodesRef.current;
-
-      for (const n of nodes) {
-        const dx = mouse.current.x - n.x;
-        const dy = mouse.current.y - n.y;
-        const d = Math.sqrt(dx * dx + dy * dy);
-        if (d < 180) {
-          n.vx += dx / d * 0.018;
-          n.vy += dy / d * 0.018;
-        }
-
-        n.vx *= 0.994;
-        n.vy *= 0.994;
-        n.x += n.vx;
-        n.y += n.vy;
-
-        if (n.x < 0) { n.x = 0; n.vx *= -1; }
-        if (n.x > width) { n.x = width; n.vx *= -1; }
-        if (n.y < 0) { n.y = 0; n.vy *= -1; }
-        if (n.y > height) { n.y = height; n.vy *= -1; }
-      }
-
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < CONNECTION_DIST) {
-            const alpha = (1 - dist / CONNECTION_DIST) * 0.18;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(0,255,157,${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-      }
-
-      for (const n of nodes) {
-        const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 3);
-        grad.addColorStop(0, "rgba(0,255,157,0.9)");
-        grad.addColorStop(1, "rgba(0,255,157,0)");
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, 3, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
-      }
-
-      rafRef.current = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMouse);
-      window.removeEventListener("touchmove", onTouchMove);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 -z-10 h-full w-full"
-      style={{ opacity: 0.7 }}
-    />
+    <div className="absolute inset-0 -z-10">
+      <WebGLErrorBoundary fallback={<NeuralCanvas2D />}>
+        <ThreeScene />
+      </WebGLErrorBoundary>
+    </div>
   );
 }

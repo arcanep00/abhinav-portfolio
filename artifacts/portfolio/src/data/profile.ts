@@ -186,7 +186,6 @@ export const navItems = [
   { label: "Experience", href: "/experience" },
   { label: "Projects", href: "/projects" },
   { label: "Skills", href: "/skills" },
-  { label: "Odoo ERP", href: "/odoo" },
   { label: "Education", href: "/education" },
   { label: "Contact", href: "/contact" }
 ] as const;

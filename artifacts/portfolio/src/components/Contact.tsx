@@ -11,7 +11,7 @@ export function Contact() {
   return (
     <Section
       eyebrow="Contact"
-      title="Open to Python backend, Django, FastAPI, and Odoo ERP roles."
+      title="Open to Python backend, Django, and FastAPI roles."
       description="Best fit for teams hiring backend engineers who build reliable APIs, design PostgreSQL schemas, and deliver production-ready Python services."
     >
       <motion.div
