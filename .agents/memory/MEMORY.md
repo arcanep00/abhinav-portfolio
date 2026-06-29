@@ -1,0 +1,1 @@
+- [WebGL in Replit sandbox](webgl-sandbox.md) — Replit preview has no GPU; always probe WebGL before mounting @react-three/fiber Canvas or the Vite error overlay will fire.
