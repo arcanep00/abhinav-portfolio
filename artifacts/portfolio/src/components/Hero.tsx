@@ -1,175 +1,179 @@
 "use client";
 
-import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Download,
-  Github,
-  Mail,
-  Sparkles
-} from "lucide-react";
-import { Button } from "@/components/Button";
-import { siteConfig, profile } from "@/data/profile";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ArrowRight, Download } from "lucide-react";
+import { NeuralBackground } from "./three/NeuralBackground";
+import { TorusKnot3D } from "./three/TorusKnot3D";
+import { TypewriterCycle } from "./TypewriterCycle";
 
-const stats = [
-  ["Focus", "Python Backend"],
-  ["Stack", "Django + FastAPI"],
-  ["ERP", "Odoo + PostgreSQL"]
+const CHIPS = ["Python Backend Engineer", "Django Developer", "FastAPI Developer", "REST API Engineer"];
+
+const CODE_LINES = [
+  { label: "role", value: "python_backend_engineer", color: "#00ff9d" },
+  { label: "stack", value: "FastAPI, Django, PostgreSQL, Redis", color: "#00f5ff" },
+  { label: "focus", value: "REST APIs, LLMs, async pipelines", color: "#a78bfa" },
+  { label: "status", value: "open_to_backend_roles ✓", color: "#00ff9d" }
 ];
 
 export function Hero() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".hero-stagger > *",
+        { opacity: 0, y: 32, filter: "blur(8px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.8,
+          stagger: 0.12,
+          ease: "power3.out",
+          delay: 0.2
+        }
+      );
+      gsap.fromTo(
+        ".hero-code-card",
+        { opacity: 0, x: 40, scale: 0.96 },
+        { opacity: 1, x: 0, scale: 1, duration: 0.9, ease: "power3.out", delay: 0.6 }
+      );
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="relative isolate min-h-[calc(100vh-4rem)] overflow-hidden px-5 pb-20 pt-28 sm:px-8 lg:px-12">
-      <img
-        src="/hero-backend-workspace.png"
-        alt=""
-        className="absolute inset-0 -z-20 h-full w-full object-cover opacity-[0.42]"
+    <section
+      ref={containerRef}
+      className="relative isolate flex min-h-screen items-center overflow-hidden"
+      style={{ background: "#050508" }}
+    >
+      <NeuralBackground />
+
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 50% -10%, rgba(0,255,157,0.09), transparent)"
+        }}
       />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,#071013_0%,rgba(7,16,19,0.92)_34%,rgba(7,16,19,0.68)_64%,rgba(7,16,19,0.9)_100%)]" />
-      <div className="absolute inset-0 -z-10 bg-radial-grid opacity-80" />
-      <motion.div
-        aria-hidden="true"
-        animate={{ x: ["-20%", "120%"] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        className="absolute top-28 -z-10 h-px w-1/2 bg-gradient-to-r from-transparent via-emeraldSoft/50 to-transparent"
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,255,157,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,157,0.025) 1px, transparent 1px)",
+          backgroundSize: "60px 60px"
+        }}
       />
 
-      <div className="mx-auto grid min-h-[calc(100vh-8rem)] max-w-7xl items-center gap-12 lg:grid-cols-[1.06fr_0.94fr]">
-        <motion.div
-          initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-3xl"
-        >
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emeraldSoft/30 bg-emeraldSoft/10 px-4 py-2 text-xs font-semibold text-emeraldSoft backdrop-blur">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emeraldSoft opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emeraldSoft" />
+      <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 pb-20 pt-28 sm:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-12 lg:pt-24">
+        <div className="hero-stagger flex flex-col gap-5">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#00ff9d]/30 bg-[#00ff9d]/10 px-4 py-2 text-xs font-semibold text-[#00ff9d]">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00ff9d] opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00ff9d]" />
+              </span>
+              Open to Python Backend roles
             </span>
-            {profile.availability}
           </div>
-          <div className="mb-5 flex flex-wrap gap-2">
-            {profile.heroRoles.slice(0, 4).map((role) => (
+
+          <div className="flex flex-wrap gap-2">
+            {CHIPS.map((chip) => (
               <span
-                key={role}
-                className="rounded-md border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-slate-200 backdrop-blur"
+                key={chip}
+                className="rounded border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-300"
               >
-                {role}
+                {chip}
               </span>
             ))}
           </div>
-          <p className="font-display text-sm font-semibold uppercase tracking-[0.22em] text-emeraldSoft">
-            <span className="inline-flex items-center gap-2">
-              <Sparkles size={15} aria-hidden="true" /> {profile.role}
-            </span>
-          </p>
-          <h1 className="mt-5 max-w-4xl font-display text-4xl font-semibold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
-            I build{" "}
-            <span className="premium-text">production-grade Python backend systems</span>{" "}
-            with Django, FastAPI, and REST APIs.
-          </h1>
-          <div className="mt-4 h-1.5 w-44 rounded-full bg-gradient-to-r from-emeraldSoft via-cyanSoft to-goldSoft shadow-glow" />
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            {profile.headline} Currently engineering backend solutions at{" "}
-            {profile.company} as a {profile.position}.
-          </p>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400">
-            {profile.recruiterMessage}
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="/projects">
-              View Projects <ArrowRight size={17} />
-            </Button>
-            <Button href={siteConfig.resumePath} variant="secondary" external>
-              Resume <Download size={17} />
-            </Button>
+
+          <div>
+            <p className="mb-3 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-[#00ff9d] text-glow-green">
+              Python Backend Engineer
+            </p>
+            <h1 className="font-display text-4xl font-bold leading-[1.06] text-white sm:text-5xl lg:text-[3.6rem]">
+              I build production-grade<br />
+              Python backend systems with{" "}
+              <TypewriterCycle />
+            </h1>
           </div>
-          <div className="mt-9 grid max-w-2xl gap-3 sm:grid-cols-3">
-            {stats.map(([label, value], index) => (
-              <motion.div
+
+          <p className="max-w-xl text-base leading-8 text-slate-400">
+            Building scalable REST APIs, async FastAPI services, PostgreSQL data layers, and
+            LLM-powered pipelines. Currently engineering backend solutions at Etelligense Technology.
+          </p>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <a href="/projects" className="btn-outline">
+              View My Work <ArrowRight size={16} />
+            </a>
+            <a href="/Abhinav-Pandey-Resume.pdf" className="btn-primary" download>
+              Download CV <Download size={16} />
+            </a>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 pt-2">
+            {[
+              ["3+", "Backend Projects"],
+              ["2+", "Frameworks"],
+              ["1+", "Years Coding"]
+            ].map(([num, label]) => (
+              <div
                 key={label}
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.32 + index * 0.08, duration: 0.5 }}
-                className="rounded-lg border border-white/10 bg-white/[0.07] p-4 backdrop-blur-xl"
+                className="rounded-lg border border-white/[0.07] bg-white/[0.03] p-4 text-center"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  {label}
-                </p>
-                <p className="mt-2 font-display text-base font-semibold text-white">{value}</p>
-              </motion.div>
+                <p className="font-display text-2xl font-bold text-[#00ff9d]">{num}</p>
+                <p className="mt-1 text-xs text-slate-400">{label}</p>
+              </div>
             ))}
           </div>
-          <div className="mt-9 flex flex-wrap gap-4 text-sm text-slate-300">
-            <a
-              className="inline-flex items-center gap-2 transition hover:text-white"
-              href={`mailto:${profile.email}`}
-            >
-              <Mail size={16} aria-hidden="true" /> {profile.email}
-            </a>
-            <a
-              className="inline-flex items-center gap-2 transition hover:text-white"
-              href="https://github.com/arcanep00"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Github size={16} aria-hidden="true" /> GitHub
-            </a>
-          </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-          className="hidden lg:block"
-        >
-          <div className="relative rounded-lg border border-white/10 bg-white/[0.07] p-5 shadow-glow backdrop-blur-2xl">
-            <motion.div
-              aria-hidden="true"
-              animate={{ y: [-8, 8, -8] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -right-7 -top-7 rounded-lg border border-emeraldSoft/20 bg-ink/80 px-4 py-3 text-sm font-semibold text-emeraldSoft shadow-glow backdrop-blur-xl"
-            >
-              REST API Engineer
-            </motion.div>
-            <div className="mb-5 flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-red-400" />
-              <span className="h-3 w-3 rounded-full bg-goldSoft" />
-              <span className="h-3 w-3 rounded-full bg-emeraldSoft" />
+        <div className="flex flex-col gap-5">
+          <div className="hero-code-card relative hidden h-72 overflow-hidden rounded-xl lg:block">
+            <TorusKnot3D />
+            <div
+              className="pointer-events-none absolute inset-0 rounded-xl"
+              style={{ border: "1px solid rgba(0,245,255,0.15)" }}
+            />
+          </div>
+
+          <div
+            className="hero-code-card glass-card rounded-xl p-5 font-mono text-sm"
+            style={{ borderColor: "rgba(0,255,157,0.12)" }}
+          >
+            <div className="mb-4 flex items-center gap-2">
+              <span className="h-3 w-3 rounded-full bg-red-400/80" />
+              <span className="h-3 w-3 rounded-full bg-yellow-400/80" />
+              <span className="h-3 w-3 rounded-full bg-[#00ff9d]/80" />
+              <span className="ml-2 text-xs text-slate-500">abhinav@backend ~ python</span>
             </div>
-            <div className="space-y-4 font-mono text-sm text-slate-300">
-              <p>
-                <span className="text-cyanSoft">role</span>: python_backend_engineer
-              </p>
-              <p>
-                <span className="text-cyanSoft">stack</span>: Django, FastAPI, PostgreSQL, Redis
-              </p>
-              <p>
-                <span className="text-cyanSoft">focus</span>: REST APIs, ERP, database design
-              </p>
-              <p>
-                <span className="text-cyanSoft">status</span>: available_for_backend_roles
-              </p>
-            </div>
-            <div className="mt-6 grid gap-3">
-              {[
-                "JWT authentication & API design",
-                "PostgreSQL schema optimization",
-                "Celery background processing"
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3 rounded-md border border-white/10 bg-ink/40 px-4 py-3 text-sm text-slate-200"
-                >
-                  <CheckCircle2 size={16} className="shrink-0 text-emeraldSoft" aria-hidden="true" />
-                  {item}
-                </div>
+            <div className="space-y-2">
+              {CODE_LINES.map(({ label, value, color }) => (
+                <p key={label} className="text-slate-300">
+                  <span className="text-slate-500">$&nbsp;</span>
+                  <span style={{ color }} className="font-semibold">{label}</span>
+                  <span className="text-slate-500">: </span>
+                  <span className="text-slate-200">{value}</span>
+                </p>
               ))}
+              <p className="text-slate-500">
+                <span className="mr-1 text-[#00ff9d]">▶</span>
+                <span className="animate-pulse">_</span>
+              </p>
             </div>
           </div>
-        </motion.div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-xs text-slate-600">scroll</span>
+          <div className="h-10 w-px bg-gradient-to-b from-[#00ff9d]/40 to-transparent" />
+        </div>
       </div>
     </section>
   );

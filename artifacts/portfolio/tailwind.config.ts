@@ -1,34 +1,47 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./index.html"
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx}", "./index.html"],
   theme: {
     extend: {
       colors: {
-        ink: "#071013",
-        panel: "rgba(9, 18, 24, 0.72)",
-        line: "rgba(165, 243, 252, 0.18)",
-        cyanSoft: "#8be9ff",
-        emeraldSoft: "#64f4ac",
-        goldSoft: "#f6c96f"
+        /* new design system */
+        void: "#050508",
+        ink: "#050508",
+        surface: "rgba(10,10,20,0.80)",
+        glass: "rgba(255,255,255,0.04)",
+        /* primary accents */
+        green: "#00ff9d",
+        cyan: "#00f5ff",
+        purple: "#a78bfa",
+        /* legacy aliases — keep for existing components */
+        emeraldSoft: "#00ff9d",
+        cyanSoft: "#00f5ff",
+        goldSoft: "#a78bfa",
+        /* dim variants */
+        dimgreen: "rgba(0,255,157,0.12)",
+        dimcyan: "rgba(0,245,255,0.12)"
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["Space Grotesk", "Inter", "ui-sans-serif", "system-ui", "sans-serif"]
+        sans: ['"Space Grotesk"', "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ['"Space Grotesk"', "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"]
       },
       boxShadow: {
-        glow: "0 0 50px rgba(100, 244, 172, 0.16)",
-        glass: "0 18px 70px rgba(0, 0, 0, 0.34)"
+        green: "0 0 30px rgba(0,255,157,0.25), 0 0 80px rgba(0,255,157,0.08)",
+        cyan: "0 0 30px rgba(0,245,255,0.25), 0 0 80px rgba(0,245,255,0.08)",
+        glow: "0 0 30px rgba(0,255,157,0.22), 0 0 80px rgba(0,255,157,0.08)",
+        glass: "0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)"
       },
       backgroundImage: {
+        "grid-pattern":
+          "linear-gradient(rgba(0,255,157,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,157,0.025) 1px, transparent 1px)",
         "radial-grid":
-          "radial-gradient(circle at 20% 10%, rgba(139, 233, 255, 0.16), transparent 30%), radial-gradient(circle at 80% 20%, rgba(100, 244, 172, 0.14), transparent 26%), linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)"
+          "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,255,157,0.09), transparent)"
       },
       backgroundSize: {
-        "radial-grid": "auto, auto, 52px 52px, 52px 52px"
+        "grid-pattern": "60px 60px",
+        "radial-grid": "auto"
       }
     }
   },

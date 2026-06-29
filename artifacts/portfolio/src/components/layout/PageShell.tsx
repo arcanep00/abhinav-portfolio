@@ -8,10 +8,10 @@ type PageShellProps = {
 
 export function PageShell({ children }: PageShellProps) {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-ink">
+    <div className="relative min-h-screen overflow-x-hidden" style={{ background: "#050508" }}>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-emeraldSoft focus:px-4 focus:py-2 focus:text-ink"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-[#00ff9d] focus:px-4 focus:py-2 focus:text-[#050508]"
       >
         Skip to main content
       </a>

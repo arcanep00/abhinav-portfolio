@@ -1,0 +1,54 @@
+You are building a world-class, award-worthy 3D developer portfolio for Abhinav Pandey — a Python/FastAPI backend engineer. This must look like an awwwards.com finalist. Use React + Vite + Three.js + @react-three/fiber + @react-three/drei + GSAP + ScrollTrigger + Tailwind CSS. Build everything from scratch. No templates, no placeholder content. Every pixel must be intentional.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## STEP 1 — INSTALL DEPENDENCIES FIRST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Run these commands:
+npm create vite@latest . -- --template react --force
+npm install three @react-three/fiber @react-three/drei
+npm install gsap @gsap/react
+npm install tailwindcss @tailwindcss/vite
+npm install framer-motion lucide-react
+npm install @fontsource/space-grotesk @fontsource/inter @fontsource/jetbrains-mono
+npm install react-intersection-observer
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## STEP 2 — EXACT PERSONAL DETAILS (use verbatim)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name: Abhinav Pandey
+Current Role: Software Development Intern @ Etelligense Technology
+Tagline: "I build production-grade Python backend systems with FastAPI, Django, and LLMs."
+Availability: Open to Python Backend roles
+Email: panabhi8456@gmail.com
+Phone: +91 89796 10223
+Location: Ghaziabad, India
+GitHub: github.com/arcanep00
+Portfolio (current): abhinav-portfolio-ruddy.vercel.app
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## STEP 3 — SECTIONS & EXACT CONTENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### [SECTION 1] HERO — Full viewport, most impactful
+
+VISUAL: Full-screen Three.js canvas as background. Render a dense interactive neural network / particle field — nodes connected by thin glowing lines, animated continuously, reacting to mouse movement with parallax. Background color: #050508. Particle color: #00ff9d (green) with 10% opacity lines.
+
+FLOATING 3D ELEMENT: A slowly rotating Torus Knot geometry (wireframe, cyan #00f5ff, emissive glow) centered right side. On mouse hover, it speeds up and shifts color to #00ff9d.
+
+LEFT CONTENT (stacked, GSAP stagger fade-in on load):
+- Badge pill: "● Open to Python Backend roles" (green pulsing dot)
+- Role chips (horizontal): [Python Backend Engineer] [Django Developer] [FastAPI Developer] [REST API Engineer]
+- Eyebrow text (small caps, green #00ff9d): "PYTHON BACKEND ENGINEER"
+- H1 (massive, white): "I build production-grade Python backend systems with"
+- H1 continuation — these 3 words cycle with typewriter/glitch animation:
+  Word 1: "Django" (color: #00ff9d)
+  Word 2: "FastAPI" (color: #00f5ff)  
+  Word 3: "LLMs." (color: #a78bfa purple)
+- Subtext: "Building scalable REST APIs, async FastAPI services, PostgreSQL data layers, and LLM-powered pipelines. Currently engineering backend solutions at Etelligense Technology."
+- Two CTA buttons:
+  Button 1: "View My Work" — glowing green border, transparent bg, arrow icon
+  Button 2: "Download CV" — solid #00ff9d, dark text
+
+FLOATING CODE CARD (bottom right, glassmorphism dark card, like a terminal):
