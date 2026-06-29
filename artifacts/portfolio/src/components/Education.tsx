@@ -1,35 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { education } from "@/data/profile";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export function Education() {
   const Icon = education.icon;
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    el.style.opacity = "0";
-    el.style.transform = "translateY(50px)";
-    el.style.transition = "opacity 0.65s ease, transform 0.65s ease";
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.style.opacity = "1";
-          el.style.transform = "translateY(0)";
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  useScrollReveal();
 
   return (
     <Section
@@ -37,7 +15,7 @@ export function Education() {
       title="Computer Science foundation supporting backend engineering."
       description="B.Tech in Computer Science Engineering with coursework directly applicable to backend systems, databases, and software architecture."
     >
-      <div ref={ref}>
+      <div className="reveal">
         <GlassCard className="p-6 sm:p-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
             <div className="flex gap-4">

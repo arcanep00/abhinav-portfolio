@@ -1,0 +1,66 @@
+The animations are not visible at all. The site looks completely flat and static. Fix this properly:
+
+1. PROJECT CARDS — 3D tilt is not working. Replace the current implementation with this exact JavaScript on every project card:
+
+   Add onMouseMove handler:
+   const handleMouseMove = (e, cardRef) => {
+     const rect = cardRef.current.getBoundingClientRect();
+     const x = e.clientX - rect.left;
+     const y = e.clientY - rect.top;
+     const centerX = rect.width / 2;
+     const centerY = rect.height / 2;
+     const rotateX = ((y - centerY) / centerY) * -8;
+     const rotateY = ((x - centerX) / centerX) * 8;
+     cardRef.current.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+     cardRef.current.style.transition = 'transform 0.1s ease';
+   };
+   
+   Add onMouseLeave handler:
+   cardRef.current.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)';
+   cardRef.current.style.transition = 'transform 0.5s ease';
+
+2. SCROLL ANIMATIONS — Nothing is animating on scroll. Add this CSS to globals.css and apply the classes:
+
+   .reveal {
+     opacity: 0;
+     transform: translateY(40px);
+     transition: opacity 0.7s ease, transform 0.7s ease;
+   }
+   .reveal.visible {
+     opacity: 1;
+     transform: translateY(0);
+   }
+   .reveal-left {
+     opacity: 0;
+     transform: translateX(-60px);
+     transition: opacity 0.7s ease, transform 0.7s ease;
+   }
+   .reveal-left.visible {
+     opacity: 1;
+     transform: translateX(0);
+   }
+
+   Add this JS to a useScrollReveal hook and call it in every section:
+   useEffect(() => {
+     const observer = new IntersectionObserver(
+       (entries) => entries.forEach(e => {
+         if (e.isIntersecting) e.target.classList.add('visible');
+       }),
+       { threshold: 0.15 }
+     );
+     document.querySelectorAll('.reveal, .reveal-left').forEach(el => observer.observe(el));
+     return () => observer.disconnect();
+   }, []);
+
+   Apply class "reveal" to: every section h2, every skill card, every project card, education card
+   Apply class "reveal-left" to: every experience card
+
+3. SKILLS SECTION — Each skill card must have staggered animation delay:
+   First card: transition-delay: 0s
+   Second card: transition-delay: 0.1s
+   Third card: transition-delay: 0.2s
+   (and so on up to 0.6s max)
+
+4. HERO SECTION — The particle network background dots are too small and invisible. Make particles bigger: size 3px, color #00ff9d, opacity 0.8. Connection lines color #00ff9d opacity 0.3.
+
+Test by scrolling through every section and confirm animations fire. Show me the preview of Projects, Skills, and Experience sections.

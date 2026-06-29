@@ -29,17 +29,20 @@ export function NeuralCanvas2D() {
     };
 
     resize();
-    window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", (e) => { mouse.current = { x: e.clientX, y: e.clientY }; });
+    const onResize = () => resize();
+    const onMouseMove = (e: MouseEvent) => { mouse.current = { x: e.clientX, y: e.clientY }; };
+    window.addEventListener("resize", onResize);
+    window.addEventListener("mousemove", onMouseMove);
 
     const draw = () => {
       const { width, height } = canvas;
       ctx.clearRect(0, 0, width, height);
+
       for (const n of nodes.current) {
         const dx = mouse.current.x - n.x;
         const dy = mouse.current.y - n.y;
         const d = Math.sqrt(dx * dx + dy * dy);
-        if (d < 200) { n.vx += dx / d * 0.015; n.vy += dy / d * 0.015; }
+        if (d < 200) { n.vx += (dx / d) * 0.015; n.vy += (dy / d) * 0.015; }
         n.vx *= 0.994; n.vy *= 0.994;
         n.x += n.vx; n.y += n.vy;
         if (n.x < 0) { n.x = 0; n.vx *= -1; }
@@ -47,6 +50,7 @@ export function NeuralCanvas2D() {
         if (n.y < 0) { n.y = 0; n.vy *= -1; }
         if (n.y > height) { n.y = height; n.vy *= -1; }
       }
+
       for (let i = 0; i < nodes.current.length; i++) {
         for (let j = i + 1; j < nodes.current.length; j++) {
           const dx = nodes.current[i].x - nodes.current[j].x;
@@ -56,27 +60,34 @@ export function NeuralCanvas2D() {
             ctx.beginPath();
             ctx.moveTo(nodes.current[i].x, nodes.current[i].y);
             ctx.lineTo(nodes.current[j].x, nodes.current[j].y);
-            ctx.strokeStyle = `rgba(0,255,157,${(1 - dist / CONNECTION_DIST) * 0.18})`;
+            ctx.strokeStyle = `rgba(0,255,157,${(1 - dist / CONNECTION_DIST) * 0.3})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
         }
       }
+
       for (const n of nodes.current) {
-        const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 3);
-        g.addColorStop(0, "rgba(0,255,157,0.9)");
-        g.addColorStop(1, "rgba(0,255,157,0)");
         ctx.beginPath();
         ctx.arc(n.x, n.y, 3, 0, Math.PI * 2);
-        ctx.fillStyle = g;
+        ctx.fillStyle = "rgba(0,255,157,0.8)";
         ctx.fill();
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = "#00ff9d";
+        ctx.fill();
+        ctx.shadowBlur = 0;
       }
+
       raf.current = requestAnimationFrame(draw);
     };
     draw();
 
-    return () => { window.removeEventListener("resize", resize); cancelAnimationFrame(raf.current); };
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("mousemove", onMouseMove);
+      cancelAnimationFrame(raf.current);
+    };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 -z-10 h-full w-full opacity-70" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 -z-10 h-full w-full" />;
 }

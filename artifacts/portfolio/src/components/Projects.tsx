@@ -8,10 +8,9 @@ import { projects } from "@/data/projects";
 import { fadeUp, stagger } from "@/lib/motion";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
-const MAX_TILT = 8;
-
-function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+function TiltCard({ children }: { children: React.ReactNode }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
@@ -20,25 +19,25 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const rotX = -((y - cy) / cy) * MAX_TILT;
-    const rotY = ((x - cx) / cx) * MAX_TILT;
-    card.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`;
-    card.style.transition = "transform 0.08s ease";
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    card.style.transition = "transform 0.1s ease";
   }
 
   function handleMouseLeave() {
     const card = cardRef.current;
     if (!card) return;
     card.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)";
-    card.style.transition = "transform 0.45s ease";
+    card.style.transition = "transform 0.5s ease";
   }
 
   return (
     <div
       ref={cardRef}
-      className={className}
+      className="h-full"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ willChange: "transform" }}
@@ -51,6 +50,7 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
 export function Projects() {
   const [active, setActive] = useState(0);
   const activeProject = projects[active];
+  useScrollReveal();
 
   return (
     <Section
@@ -122,16 +122,14 @@ export function Projects() {
         </GlassCard>
       </motion.div>
 
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.18 }}
-        className="grid gap-5 lg:grid-cols-3"
-      >
-        {projects.map((project) => (
-          <motion.article key={project.slug} variants={fadeUp}>
-            <TiltCard className="h-full">
+      <div className="grid gap-5 lg:grid-cols-3">
+        {projects.map((project, i) => (
+          <div
+            key={project.slug}
+            className="reveal"
+            style={{ transitionDelay: `${i * 0.12}s` }}
+          >
+            <TiltCard>
               <GlassCard className="flex h-full flex-col p-6">
                 <div className="mb-5 flex items-center justify-between gap-4">
                   <span className="rounded-md border border-cyanSoft/20 bg-cyanSoft/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-cyanSoft">
@@ -188,9 +186,9 @@ export function Projects() {
                 </div>
               </GlassCard>
             </TiltCard>
-          </motion.article>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </Section>
   );
 }
