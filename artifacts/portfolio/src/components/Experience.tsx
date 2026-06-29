@@ -1,68 +1,59 @@
-"use client";
-
-import { Briefcase } from "lucide-react";
-import { experience } from "@/data/profile";
-import { GlassCard } from "./GlassCard";
-import { Section } from "./Section";
+import { useEffect, useRef } from 'react';
 
 export function Experience() {
+  const sectionRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.1 });
+    sectionRef.current?.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <Section
-      eyebrow="Experience"
-      title="Engineering impact through backend development and ERP customization."
-      description="Internship experience focused on delivering reliable Python backend systems, REST APIs, and Odoo ERP solutions with measurable engineering outcomes."
-    >
+    <section ref={sectionRef} className="min-h-screen bg-[#050508] px-6 md:px-20 py-24">
+      <p className="reveal text-[#00ff9d] text-xs font-mono tracking-widest mb-4">// EXPERIENCE</p>
+      <h2 className="reveal text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+        Engineering impact through backend development and ERP customization.
+      </h2>
+      <p className="reveal text-[#9ca3af] text-lg mb-16">
+        Internship experience focused on delivering reliable Python backend systems, REST APIs, and production-grade features.
+      </p>
       <div className="relative">
-        <div
-          className="absolute left-6 top-0 hidden h-full w-0.5 sm:block"
-          style={{
-            background: "linear-gradient(to bottom, transparent, #00ff9d 10%, #00ff9d 90%, transparent)",
-            boxShadow: "0 0 8px rgba(0,255,157,0.6), 0 0 20px rgba(0,255,157,0.2)"
-          }}
-          aria-hidden="true"
-        />
-        <div className="space-y-6 sm:pl-16">
-          {experience.map((item, i) => (
-            <div
-              key={item.company}
-              className={`animate-on-scroll-left stagger-${Math.min(i + 1, 5)}`}
-            >
-              <GlassCard className="p-6 sm:p-8">
-                <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="flex gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-emeraldSoft/[0.14] text-emeraldSoft">
-                      <Briefcase size={23} aria-hidden="true" />
-                    </div>
-                    <div>
-                      <h3 className="font-display text-2xl font-semibold text-white">{item.role}</h3>
-                      <p className="mt-1 text-slate-300">{item.company} · {item.location}</p>
-                      <p className="mt-3 max-w-2xl leading-7 text-slate-400">{item.summary}</p>
-                    </div>
-                  </div>
-                  <span className="shrink-0 rounded-md border border-cyanSoft/20 bg-cyanSoft/10 px-4 py-2 text-sm font-semibold text-cyanSoft">
-                    {item.period}
-                  </span>
-                </div>
-                <ul className="mt-7 grid gap-4 text-slate-300 md:grid-cols-2">
-                  {item.highlights.map((highlight) => (
-                    <li key={highlight} className="flex gap-3 leading-7">
-                      <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-emeraldSoft" />
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-7 flex flex-wrap gap-2 border-t border-white/10 pt-6">
-                  {item.technologies.map((tech) => (
-                    <span key={tech} className="rounded-md border border-white/10 bg-white/[0.08] px-3 py-2 text-xs font-semibold text-slate-200">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </GlassCard>
+        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-[#00ff9d] ml-6 hidden md:block" style={{boxShadow:'0 0 10px #00ff9d'}} />
+        <div className="reveal md:ml-16 bg-[#111118] border border-[#1f2937] rounded-xl p-8"
+          style={{transition:'opacity 0.7s ease, transform 0.7s ease'}}>
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
+            <div>
+              <h3 className="text-xl font-bold text-white">Software Development Intern</h3>
+              <p className="text-[#00ff9d] font-mono text-sm mt-1">Etelligense Technology · Greater Noida West</p>
             </div>
-          ))}
+            <span className="mt-2 md:mt-0 px-4 py-2 bg-[#1f2937] text-[#9ca3af] text-sm rounded-lg font-mono">Jan 2026 — Present</span>
+          </div>
+          <p className="text-[#6b7280] mb-6">Contributing to backend-driven applications and Odoo ERP customization in a production-oriented internship environment.</p>
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <ul className="space-y-3">
+              {['Engineered backend features using Python and Django, integrating REST APIs with PostgreSQL-backed data models for enterprise workflows.',
+                'Designed and optimized PostgreSQL queries, improving data retrieval for database-backed features and API endpoints.',
+                'Built FastAPI microservices with async endpoints for high-throughput internal tooling.'].map(b=>(
+                <li key={b} className="flex gap-3 text-[#9ca3af] text-sm"><span className="text-[#00ff9d] mt-1 shrink-0">•</span>{b}</li>
+              ))}
+            </ul>
+            <ul className="space-y-3">
+              {['Customized Odoo ERP modules, reports, and business processes — bridging Python backend logic with real operational requirements.',
+                'Built and consumed REST APIs with structured validation, error handling, and authentication-aware endpoint design.',
+                'Collaborated using Git/GitHub with branching strategies for feature delivery.'].map(b=>(
+                <li key={b} className="flex gap-3 text-[#9ca3af] text-sm"><span className="text-[#00ff9d] mt-1 shrink-0">•</span>{b}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {['Python','Django','FastAPI','PostgreSQL','REST APIs','Git','Odoo'].map(t=>(
+              <span key={t} className="px-3 py-1 bg-[#0d1117] border border-[#1f2937] text-[#6b7280] text-xs rounded font-mono">{t}</span>
+            ))}
+          </div>
         </div>
       </div>
-    </Section>
+    </section>
   );
 }

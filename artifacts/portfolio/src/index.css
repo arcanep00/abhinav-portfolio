@@ -88,3 +88,9 @@
 .stagger-3 { animation-delay: 0.3s !important; }
 .stagger-4 { animation-delay: 0.4s !important; }
 .stagger-5 { animation-delay: 0.5s !important; }
+
+/* ── reveal / in-view (component-local observers) ─────────── */
+.reveal.in-view {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}

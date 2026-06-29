@@ -1,148 +1,53 @@
-"use client";
+import { useEffect, useRef } from 'react';
 
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
-import { profile } from "@/data/profile";
-import { fadeUp, stagger } from "@/lib/motion";
-import { GlassCard } from "./GlassCard";
-import { Section } from "./Section";
-
-const focus = [
-  "Backend Engineering",
-  "Python Ecosystem",
-  "REST APIs",
-  "FastAPI",
-  "Django",
-  "Database Design",
-  "Scalable Systems"
-];
-
-function FloatingSphere() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const raf = useRef(0);
-
+export function About() {
+  const sectionRef = useRef<HTMLElement>(null);
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const W = 220, H = 220;
-    canvas.width = W;
-    canvas.height = H;
-
-    const R = 88;
-    const LAT = 10;
-    const LON = 12;
-    let angle = 0;
-
-    function project(x: number, y: number, z: number) {
-      const scale = 320 / (320 + z);
-      return {
-        sx: W / 2 + x * scale,
-        sy: H / 2 + y * scale,
-        scale
-      };
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
-
-      for (let i = 0; i <= LAT; i++) {
-        const phi = (Math.PI * i) / LAT;
-        ctx.beginPath();
-        let first = true;
-        for (let j = 0; j <= 64; j++) {
-          const theta = (2 * Math.PI * j) / 64 + angle;
-          const x = R * Math.sin(phi) * Math.cos(theta);
-          const y = R * Math.cos(phi);
-          const z = R * Math.sin(phi) * Math.sin(theta);
-          const { sx, sy, scale } = project(x, y, z);
-          const alpha = Math.max(0, (z / R + 1) / 2) * 0.6 + 0.1;
-          ctx.strokeStyle = `rgba(0,255,157,${alpha})`;
-          ctx.lineWidth = 0.8;
-          if (first) { ctx.moveTo(sx, sy); first = false; }
-          else ctx.lineTo(sx, sy);
-        }
-        ctx.stroke();
-      }
-
-      for (let j = 0; j < LON; j++) {
-        const theta0 = (2 * Math.PI * j) / LON + angle;
-        ctx.beginPath();
-        let first = true;
-        for (let i = 0; i <= 64; i++) {
-          const phi = (Math.PI * i) / 64;
-          const x = R * Math.sin(phi) * Math.cos(theta0);
-          const y = R * Math.cos(phi);
-          const z = R * Math.sin(phi) * Math.sin(theta0);
-          const { sx, sy } = project(x, y, z);
-          const alpha = Math.max(0, (z / R + 1) / 2) * 0.55 + 0.08;
-          ctx.strokeStyle = `rgba(0,245,255,${alpha})`;
-          ctx.lineWidth = 0.7;
-          if (first) { ctx.moveTo(sx, sy); first = false; }
-          else ctx.lineTo(sx, sy);
-        }
-        ctx.stroke();
-      }
-
-      angle += 0.004;
-      raf.current = requestAnimationFrame(draw);
-    }
-
-    draw();
-    return () => cancelAnimationFrame(raf.current);
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.1 });
+    sectionRef.current?.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      style={{ opacity: 0.75, filter: "drop-shadow(0 0 18px rgba(0,255,157,0.35))" }}
-      aria-hidden="true"
-    />
-  );
-}
-
-export function About() {
-  return (
-    <Section
-      eyebrow="About"
-      title="Backend engineer focused on Python, APIs, and production systems."
-    >
-      <div className="relative">
-        <div
-          className="pointer-events-none absolute -right-4 -top-8 hidden lg:block"
-          aria-hidden="true"
-        >
-          <FloatingSphere />
+    <section ref={sectionRef} className="min-h-screen bg-[#050508] px-6 md:px-20 py-24">
+      <p className="reveal text-[#00ff9d] text-xs font-mono tracking-widest mb-4">// ABOUT</p>
+      <div className="flex flex-col md:flex-row gap-12 items-start">
+        <div className="flex-1">
+          <h2 className="reveal text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
+            Backend engineer focused on Python, APIs, and production systems.
+          </h2>
+          <p className="reveal text-[#9ca3af] text-lg mb-6 leading-relaxed">
+            My engineering work centers on the Python ecosystem — Django and Django REST Framework for structured enterprise APIs, and FastAPI for high-performance async services.
+          </p>
+          <p className="reveal text-[#9ca3af] text-lg mb-6 leading-relaxed">
+            I design PostgreSQL schemas with normalization, indexing, and query optimization in mind. Authentication flows, serializer validation, background processing, and caching strategies are core to how I approach backend systems.
+          </p>
+          <p className="reveal text-[#9ca3af] text-lg mb-10 leading-relaxed">
+            Whether building healthcare APIs, financial processing pipelines, or marketplace platforms, I focus on problem decomposition, API contract clarity, and code that teams can extend without rework.
+          </p>
+          <div className="reveal grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[['1+','Year Experience'],['3+','Backend Projects'],['5+','Core Technologies'],['2026','Currently Active']].map(([num,label])=>(
+              <div key={label} className="bg-[#111118] border border-[#1f2937] rounded-lg p-4 text-center">
+                <div className="text-2xl font-bold text-[#00ff9d]">{num}</div>
+                <div className="text-xs text-[#6b7280] mt-1">{label}</div>
+              </div>
+            ))}
+          </div>
+          <div className="reveal flex flex-wrap gap-3 mt-8">
+            {['Backend Engineering','Python Ecosystem','REST APIs','FastAPI + LLM'].map(tag=>(
+              <span key={tag} className="px-4 py-2 border border-[#00ff9d33] text-[#00ff9d] text-sm rounded-full font-mono">{tag}</span>
+            ))}
+          </div>
         </div>
-
-        <div className="mb-10 max-w-3xl space-y-5">
-          {profile.aboutParagraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 40)} className="leading-8 text-slate-300">
-              {paragraph}
-            </p>
-          ))}
+        <div className="hidden md:block w-64 h-64 relative">
+          <div className="w-full h-full rounded-full border border-[#00ff9d33]" style={{animation:'spin 20s linear infinite'}}/>
+          <div className="absolute inset-4 rounded-full border border-[#00f5ff22]" style={{animation:'spin 15s linear infinite reverse'}}/>
+          <div className="absolute inset-8 rounded-full border border-[#a78bfa22]" />
+          <div className="absolute inset-0 flex items-center justify-center text-[#00ff9d] font-mono text-sm">{'{ }'}</div>
         </div>
       </div>
-
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.2 }}
-        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
-      >
-        {focus.map((item) => (
-          <motion.div key={item} variants={fadeUp}>
-            <GlassCard className="flex h-full items-center gap-3 p-5">
-              <CheckCircle2 className="shrink-0 text-emeraldSoft" size={20} aria-hidden="true" />
-              <span className="font-semibold text-white">{item}</span>
-            </GlassCard>
-          </motion.div>
-        ))}
-      </motion.div>
-    </Section>
+    </section>
   );
 }

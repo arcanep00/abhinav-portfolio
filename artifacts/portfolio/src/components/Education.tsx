@@ -1,43 +1,43 @@
-"use client";
-
-import { education } from "@/data/profile";
-import { GlassCard } from "./GlassCard";
-import { Section } from "./Section";
+import { useEffect, useRef } from 'react';
 
 export function Education() {
-  const Icon = education.icon;
+  const sectionRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.1 });
+    sectionRef.current?.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <Section
-      eyebrow="Education"
-      title="Computer Science foundation supporting backend engineering."
-      description="B.Tech in Computer Science Engineering with coursework directly applicable to backend systems, databases, and software architecture."
-    >
-      <div className="animate-on-scroll">
-        <GlassCard className="p-6 sm:p-8">
-          <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-            <div className="flex gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-cyanSoft/[0.12] text-cyanSoft">
-                <Icon size={24} aria-hidden="true" />
-              </div>
-              <div>
-                <h3 className="font-display text-2xl font-semibold text-white">{education.degree}</h3>
-                <p className="mt-2 text-slate-300">{education.institute} · {education.location}</p>
-              </div>
+    <section ref={sectionRef} className="min-h-screen bg-[#050508] px-6 md:px-20 py-24">
+      <p className="reveal text-[#00ff9d] text-xs font-mono tracking-widest mb-4">// EDUCATION</p>
+      <h2 className="reveal text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+        Computer Science foundation supporting backend engineering.
+      </h2>
+      <p className="reveal text-[#9ca3af] text-lg mb-16">
+        B.Tech in Computer Science Engineering with coursework directly applicable to backend systems, databases, and software architecture.
+      </p>
+      <div className="reveal bg-[#111118] border border-[#1f2937] rounded-xl p-8"
+        style={{transition:'opacity 0.7s ease, transform 0.7s ease'}}>
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-[#0d1117] border border-[#1f2937] rounded-lg flex items-center justify-center text-2xl">🎓</div>
+            <div>
+              <h3 className="text-xl font-bold text-white">Bachelor of Technology — Computer Science Engineering</h3>
+              <p className="text-[#00ff9d] font-mono text-sm mt-1">ABES Institute of Technology · Ghaziabad</p>
             </div>
-            <span className="shrink-0 rounded-md border border-white/[0.12] px-4 py-2 text-sm font-semibold text-white">
-              {education.period}
-            </span>
           </div>
-          <div className="mt-7 flex flex-wrap gap-2">
-            {education.coursework.map((course) => (
-              <span key={course} className="rounded-md border border-white/10 bg-white/[0.08] px-3 py-2 text-sm text-slate-200">
-                {course}
-              </span>
-            ))}
-          </div>
-        </GlassCard>
+          <span className="mt-4 md:mt-0 px-4 py-2 bg-[#1f2937] text-[#9ca3af] text-sm rounded-lg font-mono">2023 — 2027</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {['Data Structures & Algorithms','Database Management Systems','Object-Oriented Programming','Operating Systems','Software Engineering','Computer Networks','Web Development'].map((c,i)=>(
+            <span key={c} className="reveal px-3 py-1.5 bg-[#0d1117] border border-[#1f2937] text-[#9ca3af] text-sm rounded font-mono"
+              style={{transitionDelay:`${i*0.07}s`}}>{c}</span>
+          ))}
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }
