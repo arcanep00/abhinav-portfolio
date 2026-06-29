@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #071013;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(139, 233, 255, 0.09), transparent 28rem),
+    radial-gradient(circle at top right, rgba(100, 244, 172, 0.08), transparent 26rem),
+    #071013;
+  color: #f8fafc;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(100, 244, 172, 0.32);
+  color: #ffffff;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid rgba(100, 244, 172, 0.8);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+button {
+  font: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #071013;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#64f4ac, #8be9ff);
+  border: 3px solid #071013;
+  border-radius: 999px;
+}
+
+.premium-text {
+  background: linear-gradient(115deg, #ffffff 8%, #8be9ff 48%, #64f4ac 72%, #f6c96f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.noise-layer::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  opacity: 0.22;
+  background-image: linear-gradient(115deg, rgba(255,255,255,0.05), transparent 24%, rgba(255,255,255,0.03));
+  mix-blend-mode: overlay;
+}

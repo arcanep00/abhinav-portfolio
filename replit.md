@@ -1,36 +1,40 @@
-# [Project name]
+# Abhinav Pandey — Portfolio
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A personal portfolio for Abhinav Pandey, Python Backend Engineer. Migrated from a Next.js/Vercel app into a React + Vite artifact within the Replit pnpm monorepo.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/portfolio run dev` — run the portfolio (port 21113)
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- Frontend: React + Vite + wouter routing + framer-motion
+- CSS: Tailwind CSS v3 (postcss mode, not @tailwindcss/vite)
+- Fonts: Inter + Space Grotesk via Google Fonts (link tags in index.html)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/portfolio/src/data/profile.ts` — all personal data, experience, skills, education, nav items, contact links
+- `artifacts/portfolio/src/data/projects.ts` — projects array with full case study sections, type `Project`
+- `artifacts/portfolio/src/components/` — all page sections and shared UI components
+- `artifacts/portfolio/src/pages/` — one file per route (imports a component + wraps in PageShell)
+- `artifacts/portfolio/src/App.tsx` — wouter Router with all 9 routes
+- `artifacts/portfolio/tailwind.config.ts` — custom colors: emeraldSoft, cyanSoft, goldSoft, ink
+- `artifacts/portfolio/public/` — hero-backend-workspace.png, Abhinav-Pandey-Resume.pdf
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- **Tailwind v3 postcss mode**: copied tailwind.config.ts from Next.js backup; vite.config.ts uses `css.postcss.plugins` instead of `@tailwindcss/vite`.
+- **wouter routing**: replaces Next.js `<Link>` and `useRouter`; WouterRouter wraps the app with `base` derived from `import.meta.env.BASE_URL`.
+- **Google Fonts via link tags**: replaces next/font/google CSS variable injection; fonts referenced by name in tailwind config (no CSS vars).
+- **No backend needed**: purely frontend portfolio, no API routes.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+8 pages: Home, About, Experience, Projects (with individual case studies), Skills, Odoo ERP, Education, Contact. LoadingOverlay intro animation on Home page.
 
 ## User preferences
 
@@ -38,7 +42,9 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Tailwind v3 must use postcss mode — do NOT install @tailwindcss/vite (v4 plugin)
+- Font family names in tailwind.config must match the Google Fonts family name exactly (no CSS variable syntax)
+- The LoadingOverlay shows for 1.2s on first load — screenshots taken immediately will capture it
 
 ## Pointers
 
