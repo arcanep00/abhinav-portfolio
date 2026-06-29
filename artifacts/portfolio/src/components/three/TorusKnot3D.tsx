@@ -1,41 +1,23 @@
-import { useRef, useState, Suspense } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef, useState, Suspense, lazy } from "react";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 import { WebGLErrorBoundary } from "./WebGLErrorBoundary";
 
-function KnotMesh({ hovered }: { hovered: boolean }) {
-  const ref = useRef<THREE.Mesh>(null);
-  const speed = useRef(0.003);
-  const mat = useRef<THREE.MeshStandardMaterial>(null);
-
-  useFrame((_, delta) => {
-    if (!ref.current || !mat.current) return;
-    const target = hovered ? 0.016 : 0.004;
-    speed.current += (target - speed.current) * 0.05;
-    ref.current.rotation.x += speed.current;
-    ref.current.rotation.y += speed.current * 1.5;
-    ref.current.rotation.z += speed.current * 0.6;
-    const targetColor = hovered ? new THREE.Color("#00ff9d") : new THREE.Color("#00f5ff");
-    mat.current.color.lerp(targetColor, 0.04);
-    mat.current.emissive.lerp(targetColor, 0.04);
-  });
-
-  return (
-    <mesh ref={ref}>
-      <torusKnotGeometry args={[1, 0.3, 200, 20, 2, 3]} />
-      <meshStandardMaterial
-        ref={mat}
-        color="#00f5ff"
-        emissive="#00f5ff"
-        emissiveIntensity={0.35}
-        wireframe
-        transparent
-        opacity={0.85}
-      />
-    </mesh>
-  );
+function isWebGLAvailable(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+    );
+  } catch {
+    return false;
+  }
 }
+
+const TorusKnotCanvas = lazy(() =>
+  import("./TorusKnotCanvas").then((m) => ({ default: m.TorusKnotCanvas }))
+);
 
 function CSSFallback({ hovered }: { hovered: boolean }) {
   const color = hovered ? "#00ff9d" : "#00f5ff";
@@ -78,6 +60,7 @@ function CSSFallback({ hovered }: { hovered: boolean }) {
 
 export function TorusKnot3D() {
   const [hovered, setHovered] = useState(false);
+  const webgl = isWebGLAvailable();
 
   return (
     <div
@@ -85,19 +68,15 @@ export function TorusKnot3D() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <WebGLErrorBoundary fallback={<CSSFallback hovered={hovered} />}>
-        <Canvas
-          camera={{ position: [0, 0, 3.8], fov: 52 }}
-          gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
-        >
-          <ambientLight intensity={0.15} />
-          <pointLight position={[4, 4, 4]} intensity={1.5} color="#00f5ff" />
-          <pointLight position={[-4, -4, -4]} intensity={0.8} color="#00ff9d" />
-          <Suspense fallback={null}>
-            <KnotMesh hovered={hovered} />
+      {webgl ? (
+        <WebGLErrorBoundary fallback={<CSSFallback hovered={hovered} />}>
+          <Suspense fallback={<CSSFallback hovered={hovered} />}>
+            <TorusKnotCanvas hovered={hovered} />
           </Suspense>
-        </Canvas>
-      </WebGLErrorBoundary>
+        </WebGLErrorBoundary>
+      ) : (
+        <CSSFallback hovered={hovered} />
+      )}
     </div>
   );
 }
