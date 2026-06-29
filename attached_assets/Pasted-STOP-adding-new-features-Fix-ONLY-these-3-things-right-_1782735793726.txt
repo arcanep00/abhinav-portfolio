@@ -1,0 +1,88 @@
+STOP adding new features. Fix ONLY these 3 things right now:
+
+━━━ FIX 1: SCROLL ANIMATIONS ━━━
+In globals.css, ADD these exact CSS rules at the bottom:
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.animate-on-scroll {
+  opacity: 0;
+}
+.animate-on-scroll.animated {
+  animation: fadeInUp 0.7s ease forwards;
+}
+.animate-on-scroll-left {
+  opacity: 0;
+}
+.animate-on-scroll-left.animated {
+  animation: fadeInLeft 0.7s ease forwards;
+}
+.stagger-1 { animation-delay: 0.1s !important; }
+.stagger-2 { animation-delay: 0.2s !important; }
+.stagger-3 { animation-delay: 0.3s !important; }
+.stagger-4 { animation-delay: 0.4s !important; }
+.stagger-5 { animation-delay: 0.5s !important; }
+
+Create ONE file: src/hooks/useAnimateOnScroll.js
+Content:
+import { useEffect } from 'react';
+export function useAnimateOnScroll() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+    const elements = document.querySelectorAll('.animate-on-scroll, .animate-on-scroll-left');
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
+Call useAnimateOnScroll() inside App.jsx (import and call it once at top level).
+
+Then add className="animate-on-scroll" to:
+- Every section h2 heading
+- Every skill card div
+- Every project card div  
+- Education card div
+
+Add className="animate-on-scroll-left stagger-1" to experience card.
+
+━━━ FIX 2: PROJECT CARDS 3D TILT ━━━
+In the Projects component, for EACH card div add these exact inline event handlers:
+
+onMouseMove={(e) => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
+  const y = ((e.clientY - rect.top) / rect.height - 0.5) * -16;
+  e.currentTarget.style.transform = `perspective(800px) rotateY(${x}deg) rotateX(${y}deg) scale(1.03)`;
+  e.currentTarget.style.transition = 'transform 0.1s ease';
+}}
+onMouseLeave={(e) => {
+  e.currentTarget.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) scale(1)';
+  e.currentTarget.style.transition = 'transform 0.5s ease';
+}}
+
+━━━ FIX 3: HERO BUTTONS ━━━
+"View My Work" button: keep existing green border style.
+"Download CV" button: background #00ff9d, color #000000 (black text), font-weight 700, padding 12px 28px, border-radius 6px.
+
+Add a THIRD button next to Download CV:
+<a href="https://github.com/arcanep00" target="_blank" rel="noopener noreferrer"
+   style="display:inline-flex, alignItems:center, gap:8px, border: 1px solid rgba(255,255,255,0.2), padding: 12px 24px, borderRadius: 6px, color: #f0f0f0, fontWeight:600, textDecoration:none">
+  GitHub ↗
+</a>
+
+Do NOT touch any other files. Do NOT add new sections. Just these 3 fixes only. Show preview when done.

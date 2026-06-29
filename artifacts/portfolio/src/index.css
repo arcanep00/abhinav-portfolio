@@ -65,3 +65,26 @@
     transform: translateX(0);
   }
 }
+
+/* ── Animation keyframes ──────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-on-scroll { opacity: 0; }
+.animate-on-scroll.animated {
+  animation: fadeInUp 0.7s ease forwards;
+}
+.animate-on-scroll-left { opacity: 0; }
+.animate-on-scroll-left.animated {
+  animation: fadeInLeft 0.7s ease forwards;
+}
+.stagger-1 { animation-delay: 0.1s !important; }
+.stagger-2 { animation-delay: 0.2s !important; }
+.stagger-3 { animation-delay: 0.3s !important; }
+.stagger-4 { animation-delay: 0.4s !important; }
+.stagger-5 { animation-delay: 0.5s !important; }

@@ -3,11 +3,9 @@
 import { education } from "@/data/profile";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export function Education() {
   const Icon = education.icon;
-  useScrollReveal();
 
   return (
     <Section
@@ -15,7 +13,7 @@ export function Education() {
       title="Computer Science foundation supporting backend engineering."
       description="B.Tech in Computer Science Engineering with coursework directly applicable to backend systems, databases, and software architecture."
     >
-      <div className="reveal">
+      <div className="animate-on-scroll">
         <GlassCard className="p-6 sm:p-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
             <div className="flex gap-4">
@@ -24,9 +22,7 @@ export function Education() {
               </div>
               <div>
                 <h3 className="font-display text-2xl font-semibold text-white">{education.degree}</h3>
-                <p className="mt-2 text-slate-300">
-                  {education.institute} · {education.location}
-                </p>
+                <p className="mt-2 text-slate-300">{education.institute} · {education.location}</p>
               </div>
             </div>
             <span className="shrink-0 rounded-md border border-white/[0.12] px-4 py-2 text-sm font-semibold text-white">
@@ -35,10 +31,7 @@ export function Education() {
           </div>
           <div className="mt-7 flex flex-wrap gap-2">
             {education.coursework.map((course) => (
-              <span
-                key={course}
-                className="rounded-md border border-white/10 bg-white/[0.08] px-3 py-2 text-sm text-slate-200"
-              >
+              <span key={course} className="rounded-md border border-white/10 bg-white/[0.08] px-3 py-2 text-sm text-slate-200">
                 {course}
               </span>
             ))}

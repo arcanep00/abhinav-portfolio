@@ -10,10 +10,12 @@ import OdooPage from "@/pages/OdooPage";
 import EducationPage from "@/pages/EducationPage";
 import ContactPage from "@/pages/ContactPage";
 import NotFound from "@/pages/not-found";
+import { useAnimateOnScroll } from "@/hooks/useAnimateOnScroll";
 
 const queryClient = new QueryClient();
 
 function Router() {
+  useAnimateOnScroll();
   return (
     <Switch>
       <Route path="/" component={HomePage} />

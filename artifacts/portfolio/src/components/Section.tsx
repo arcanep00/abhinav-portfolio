@@ -29,7 +29,7 @@ export function Section({ eyebrow, title, description, children, className }: Se
               // {eyebrow}
             </p>
           )}
-          <h2 className="font-display text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+          <h2 className="animate-on-scroll font-display text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
             {title}
           </h2>
           {description && (

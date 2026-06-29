@@ -4,11 +4,8 @@ import { Briefcase } from "lucide-react";
 import { experience } from "@/data/profile";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export function Experience() {
-  useScrollReveal();
-
   return (
     <Section
       eyebrow="Experience"
@@ -28,8 +25,7 @@ export function Experience() {
           {experience.map((item, i) => (
             <div
               key={item.company}
-              className="reveal-left"
-              style={{ transitionDelay: `${i * 0.12}s` }}
+              className={`animate-on-scroll-left stagger-${Math.min(i + 1, 5)}`}
             >
               <GlassCard className="p-6 sm:p-8">
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
@@ -39,9 +35,7 @@ export function Experience() {
                     </div>
                     <div>
                       <h3 className="font-display text-2xl font-semibold text-white">{item.role}</h3>
-                      <p className="mt-1 text-slate-300">
-                        {item.company} · {item.location}
-                      </p>
+                      <p className="mt-1 text-slate-300">{item.company} · {item.location}</p>
                       <p className="mt-3 max-w-2xl leading-7 text-slate-400">{item.summary}</p>
                     </div>
                   </div>
@@ -59,10 +53,7 @@ export function Experience() {
                 </ul>
                 <div className="mt-7 flex flex-wrap gap-2 border-t border-white/10 pt-6">
                   {item.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-md border border-white/10 bg-white/[0.08] px-3 py-2 text-xs font-semibold text-slate-200"
-                    >
+                    <span key={tech} className="rounded-md border border-white/10 bg-white/[0.08] px-3 py-2 text-xs font-semibold text-slate-200">
                       {tech}
                     </span>
                   ))}

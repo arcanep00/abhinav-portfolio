@@ -106,12 +106,60 @@ export function Hero() {
             LLM-powered pipelines. Currently engineering backend solutions at Etelligense Technology.
           </p>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <a href="/projects" className="btn-outline">
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="/projects"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                border: "1px solid rgba(0,255,157,0.45)",
+                padding: "12px 28px",
+                borderRadius: 6,
+                color: "#00ff9d",
+                fontWeight: 600,
+                textDecoration: "none",
+                fontSize: 14
+              }}
+            >
               View My Work <ArrowRight size={16} />
             </a>
-            <a href="/Abhinav-Pandey-Resume.pdf" className="btn-primary" download>
+            <a
+              href="/Abhinav-Pandey-Resume.pdf"
+              download
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "#00ff9d",
+                color: "#000000",
+                fontWeight: 700,
+                padding: "12px 28px",
+                borderRadius: 6,
+                textDecoration: "none",
+                fontSize: 14
+              }}
+            >
               Download CV <Download size={16} />
+            </a>
+            <a
+              href="https://github.com/arcanep00"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                border: "1px solid rgba(255,255,255,0.2)",
+                padding: "12px 24px",
+                borderRadius: 6,
+                color: "#f0f0f0",
+                fontWeight: 600,
+                textDecoration: "none",
+                fontSize: 14
+              }}
+            >
+              GitHub ↗
             </a>
           </div>
 
