@@ -15,11 +15,11 @@ export function Projects() {
 
   return (
     <Section className="relative"
-      <NeuralBackground />
       eyebrow="Portfolio"
       title="Production-grade systems."
       description="Exploring the intersection of scalable backend architecture, AI-driven automation, and enterprise-grade Python development."
     >
+            <NeuralBackground />
       <div id="projects-grid" className="grid lg:grid-cols-[1fr_400px] gap-8">
         <div className="relative">
           <AnimatePresence mode="wait">
