@@ -2,18 +2,7 @@ import { useRef, useState, Suspense, lazy } from "react";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 import { WebGLErrorBoundary } from "./WebGLErrorBoundary";
-
-function isWebGLAvailable(): boolean {
-  try {
-    const canvas = document.createElement("canvas");
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
-    );
-  } catch {
-    return false;
-  }
-}
+import { isWebGLAvailable } from "@/lib/utils";
 
 const TorusKnotCanvas = lazy(() =>
   import("./TorusKnotCanvas").then((m) => ({ default: m.TorusKnotCanvas }))
@@ -58,9 +47,10 @@ function CSSFallback({ hovered }: { hovered: boolean }) {
   );
 }
 
+const hasWebGL = isWebGLAvailable();
+
 export function TorusKnot3D() {
   const [hovered, setHovered] = useState(false);
-  const webgl = isWebGLAvailable();
 
   return (
     <div
@@ -68,7 +58,7 @@ export function TorusKnot3D() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {webgl ? (
+      {hasWebGL ? (
         <WebGLErrorBoundary fallback={<CSSFallback hovered={hovered} />}>
           <Suspense fallback={<CSSFallback hovered={hovered} />}>
             <TorusKnotCanvas hovered={hovered} />

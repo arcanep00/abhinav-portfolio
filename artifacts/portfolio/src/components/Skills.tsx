@@ -1,4 +1,5 @@
 import { useEffect, useRef, Suspense, lazy } from 'react';
+import { isWebGLAvailable } from '@/lib/utils';
 
 const SkillsCanvas = lazy(() => import('./three/SkillsCanvas').then(m => ({ default: m.SkillsCanvas })));
 
@@ -19,6 +20,8 @@ const CATEGORIES = [
     color: "#a78bfa"
   }
 ];
+
+const hasWebGL = isWebGLAvailable();
 
 export function Skills() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -66,9 +69,25 @@ export function Skills() {
 
           <div className="relative h-[600px] lg:h-[700px] w-full rounded-3xl bg-[#111118]/50 border border-white/5 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00ff9d]/5 to-transparent" />
-            <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">Initializing 3D Clusters...</div>}>
-              <SkillsCanvas />
-            </Suspense>
+            {hasWebGL ? (
+              <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">Initializing 3D Clusters...</div>}>
+                <SkillsCanvas />
+              </Suspense>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center p-12 text-center">
+                <div className="space-y-4">
+                  <div className="inline-flex p-4 rounded-full bg-[#00ff9d]/10 text-[#00ff9d]">
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-xl font-bold text-white">Advanced Visualization Stack</h4>
+                  <p className="text-slate-400 text-sm max-w-xs mx-auto">
+                    3D acceleration is currently unavailable in your browser environment. Core skills are listed in the side panel.
+                  </p>
+                </div>
+              </div>
+            )}
             
             {/* Legend / Info */}
             <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
