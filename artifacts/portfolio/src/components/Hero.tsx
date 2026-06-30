@@ -7,6 +7,7 @@ import { NeuralBackground } from "./three/NeuralBackground";
 import { TorusKnot3D } from "./three/TorusKnot3D";
 import { TypewriterCycle } from "./TypewriterCycle";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 
 const TECH_BADGES = [
   { icon: Cpu, label: "Python", color: "#00ff9d" },
@@ -127,14 +128,14 @@ export function Hero() {
           </div>
 
           <div className="flex flex-wrap gap-4 pt-4">
-            <a
+            <Link
               href="/projects"
               className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-white px-8 py-4 text-sm font-bold text-black transition-transform active:scale-95"
             >
               <span className="relative z-10 flex items-center gap-2">
                 View My Work <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
               </span>
-            </a>
+            </Link>
             <a
               href="/Abhinav-Pandey-Resume.pdf"
               download

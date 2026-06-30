@@ -8,6 +8,7 @@ import { projects } from "@/data/projects";
 import { fadeUp } from "@/lib/motion";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
+import { NeuralBackground } from "./three/NeuralBackground";
 
 export function Projects() {
   const [active, setActive] = useState(0);
@@ -18,7 +19,9 @@ export function Projects() {
       eyebrow="Portfolio"
       title="Production-grade systems."
       description="Exploring the intersection of scalable backend architecture, AI-driven automation, and enterprise-grade Python development."
+      className="relative overflow-hidden"
     >
+      <NeuralBackground />
       <div id="projects-grid" className="grid lg:grid-cols-[1fr_400px] gap-8">
         <div className="relative">
           <AnimatePresence mode="wait">

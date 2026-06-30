@@ -5,7 +5,7 @@ import { fadeUp } from "@/lib/motion";
 
 type SectionProps = {
   eyebrow?: string;
-  title: string;
+  title: React.ReactNode;
   description?: string;
   children: React.ReactNode;
   className?: string;
@@ -30,7 +30,9 @@ export function Section({ eyebrow, title, description, children, className }: Se
             </p>
           )}
           <h2 className="font-display text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
-            {title}
+            {typeof title === 'string' && title.includes('<span') ? (
+              <span dangerouslySetInnerHTML={{ __html: title.replace(/className=/g, 'class=') }} />
+            ) : title}
           </h2>
           {description && (
             <p className="mt-4 text-base leading-8 text-slate-400">{description}</p>
