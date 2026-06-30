@@ -21,7 +21,7 @@ export function Contact() {
   return (
     <Section
       eyebrow="Connections"
-      title="Ready for the <span className='text-[#00ff9d]'>next</span> challenge."
+      title={<>Ready for the <span className="text-[#00ff9d]">next</span> challenge.</>}
       description="Whether it is a complex backend architecture, an AI integration, or a scalable enterprise service — let us talk about how I can contribute to your team."
     >
       <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12">

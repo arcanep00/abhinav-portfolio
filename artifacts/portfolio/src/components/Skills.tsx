@@ -28,7 +28,16 @@ export function Skills() {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
     }, { threshold: 0.1 });
     sectionRef.current?.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+
+    // Fallback to ensure visibility if observer fails
+    const timer = setTimeout(() => {
+      sectionRef.current?.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+    }, 1000);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
@@ -67,7 +76,9 @@ export function Skills() {
           <div className="relative h-[600px] lg:h-[700px] w-full rounded-3xl bg-[#111118]/50 border border-white/5 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00ff9d]/5 to-transparent" />
             <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">Initializing 3D Clusters...</div>}>
-              <SkillsCanvas />
+              <div className="w-full h-full">
+                <SkillsCanvas />
+              </div>
             </Suspense>
             
             {/* Legend / Info */}
