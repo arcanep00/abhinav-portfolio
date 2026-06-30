@@ -1,5 +1,5 @@
 "use client";
-
+import { NeuralBackground } from "./three/NeuralBackground";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ExternalLink, Github, Terminal, Layers, Database } from "lucide-react";
 import { Link } from "wouter";
@@ -14,7 +14,8 @@ export function Projects() {
   const activeProject = projects[active];
 
   return (
-    <Section
+    <Section className="relative"
+      <NeuralBackground />
       eyebrow="Portfolio"
       title="Production-grade systems."
       description="Exploring the intersection of scalable backend architecture, AI-driven automation, and enterprise-grade Python development."
