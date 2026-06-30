@@ -6,16 +6,16 @@ export function useAnimateOnScroll() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animated");
+            entry.target.classList.add("in-view");
           }
         });
       },
-      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -20px 0px" }
     );
 
     function observeNew() {
       document
-        .querySelectorAll(".animate-on-scroll:not([data-ao]), .animate-on-scroll-left:not([data-ao])")
+        .querySelectorAll(".reveal:not([data-ao])")
         .forEach((el) => {
           el.setAttribute("data-ao", "1");
           io.observe(el);

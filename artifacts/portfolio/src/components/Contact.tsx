@@ -2,172 +2,145 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Send } from "lucide-react";
+import { Send, Mail, Linkedin, Github, MessageSquare, Copy, Check, Terminal } from "lucide-react";
 import { profile } from "@/data/profile";
 import { fadeUp } from "@/lib/motion";
 import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
+import React from "react";
 
-function CSSGlobe() {
-  const rings = [
-    { size: 220, tilt: "rotateX(75deg)", duration: 22, opacity: 0.18 },
-    { size: 220, tilt: "rotateX(75deg) rotateZ(60deg)", duration: 30, opacity: 0.13 },
-    { size: 220, tilt: "rotateX(75deg) rotateZ(120deg)", duration: 40, opacity: 0.10 },
-    { size: 160, tilt: "rotateX(30deg)", duration: 18, opacity: 0.14 },
-    { size: 100, tilt: "rotateX(55deg) rotateZ(45deg)", duration: 28, opacity: 0.12 },
-  ];
+export function Contact() {
+  const [copied, setCopied] = React.useState(false);
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(profile.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
-    <div
-      className="pointer-events-none absolute right-0 top-0 -z-10 overflow-hidden"
-      style={{ width: 320, height: 320, opacity: 0.9 }}
-      aria-hidden="true"
+    <Section
+      eyebrow="Connections"
+      title="Ready for the <span className='text-[#00ff9d]'>next</span> challenge."
+      description="Whether it is a complex backend architecture, an AI integration, or a scalable enterprise service — let us talk about how I can contribute to your team."
     >
-      <div
-        className="absolute"
-        style={{
-          right: -60,
-          top: -60,
-          width: 280,
-          height: 280,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}
-      >
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: 220,
-            height: 220,
-            border: "1.5px solid rgba(0,255,157,0.25)",
-            boxShadow: "0 0 40px rgba(0,255,157,0.15), inset 0 0 40px rgba(0,255,157,0.05)"
-          }}
-        />
+      <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12">
+        <div className="space-y-8">
+          <div className="grid sm:grid-cols-2 gap-6">
+            <a href={`mailto:${profile.email}`} className="group p-8 rounded-3xl border border-white/10 bg-white/5 transition-all hover:border-[#00ff9d]/30 hover:bg-[#00ff9d]/5">
+              <div className="flex items-center justify-between mb-8">
+                <div className="p-3 bg-white/5 rounded-2xl">
+                  <Mail size={24} className="text-[#00ff9d]" />
+                </div>
+                <ArrowIcon />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-1">Direct Email</h4>
+              <p className="text-sm text-slate-500 font-medium">{profile.email}</p>
+            </a>
 
-        {rings.map((ring, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: ring.size,
-              height: ring.size,
-              border: `1px solid rgba(0,255,157,${ring.opacity})`,
-              transform: ring.tilt,
-              animation: `spin-ring-${i} ${ring.duration}s linear infinite`
-            }}
-          />
-        ))}
+            <a href="https://linkedin.com/in/arcanep00" target="_blank" className="group p-8 rounded-3xl border border-white/10 bg-white/5 transition-all hover:border-[#00f5ff]/30 hover:bg-[#00f5ff]/5">
+              <div className="flex items-center justify-between mb-8">
+                <div className="p-3 bg-white/5 rounded-2xl">
+                  <Linkedin size={24} className="text-[#00f5ff]" />
+                </div>
+                <ArrowIcon />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-1">LinkedIn</h4>
+              <p className="text-sm text-slate-500 font-medium">Connect professionally</p>
+            </a>
+          </div>
 
-        {[0, 45, 90, 135].map((angle, i) => (
-          <div
-            key={`meridian-${i}`}
-            className="absolute rounded-full"
-            style={{
-              width: 220,
-              height: 220,
-              border: "1px solid rgba(0,245,255,0.1)",
-              transform: `rotateY(${angle}deg)`,
-              animation: `spin-meridian ${25 + i * 5}s linear infinite`
-            }}
-          />
-        ))}
+          <div className="p-8 rounded-3xl border border-white/10 bg-[#111118]/50 backdrop-blur-xl">
+             <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-[#00ff9d]/10 rounded-2xl">
+                  <MessageSquare size={24} className="text-[#00ff9d]" />
+                </div>
+                <div>
+                   <h4 className="text-xl font-bold text-white">Send a Message</h4>
+                   <p className="text-sm text-slate-500 font-medium">Inquiry for backend engineering roles</p>
+                </div>
+             </div>
 
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: 10,
-            height: 10,
-            background: "#00ff9d",
-            boxShadow: "0 0 12px #00ff9d, 0 0 24px #00ff9d66"
-          }}
-        />
+             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                <div className="grid sm:grid-cols-2 gap-4">
+                   <input type="text" placeholder="Full Name" className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-sm font-medium text-white focus:outline-none focus:border-[#00ff9d]/40 transition-colors" />
+                   <input type="email" placeholder="Email Address" className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-sm font-medium text-white focus:outline-none focus:border-[#00ff9d]/40 transition-colors" />
+                </div>
+                <textarea rows={4} placeholder="Your Message" className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-sm font-medium text-white focus:outline-none focus:border-[#00ff9d]/40 transition-colors resize-none"></textarea>
+                <button className="w-full bg-white text-black py-4 rounded-xl text-sm font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+                   <Send size={18} /> Send Message
+                </button>
+             </form>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-8">
+           <div className="p-10 rounded-3xl border border-[#00ff9d]/20 bg-[#00ff9d]/5 flex flex-col items-center text-center">
+              <div className="relative mb-8">
+                 <div className="h-24 w-24 rounded-full border border-white/20 flex items-center justify-center overflow-hidden bg-white/5">
+                    {/* Placeholder for Profile Image */}
+                    <div className="h-20 w-20 rounded-full bg-[#00ff9d]/20 blur-xl animate-pulse" />
+                    <Terminal className="absolute text-[#00ff9d]" size={32} />
+                 </div>
+                 <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-[#00ff9d] border-4 border-[#050508] flex items-center justify-center" />
+              </div>
+
+              <h4 className="text-2xl font-bold text-white mb-2">Abhinav Pandey</h4>
+              <p className="text-slate-400 font-medium mb-8">Available for worldwide opportunities in Python, Django, and FastAPI.</p>
+              
+              <button 
+                onClick={copyEmail}
+                className="w-full p-4 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-between group hover:border-white/20 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                   {copied ? <Check size={18} className="text-[#00ff9d]" /> : <Mail size={18} className="text-slate-500" />}
+                   <span className={`text-sm font-bold uppercase tracking-widest ${copied ? "text-[#00ff9d]" : "text-slate-400"}`}>
+                      {copied ? "Copied!" : "Copy Email"}
+                   </span>
+                </div>
+                <Copy size={16} className="text-slate-600 group-hover:text-white transition-colors" />
+              </button>
+           </div>
+
+           <div className="p-10 rounded-3xl border border-white/10 bg-white/5">
+              <h5 className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-6">Current Location</h5>
+              <div className="flex items-center gap-4 text-white">
+                 <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center">
+                    <MapIcon />
+                 </div>
+                 <div>
+                    <p className="font-bold">Greater Noida West</p>
+                    <p className="text-xs text-slate-500">Uttar Pradesh, India</p>
+                 </div>
+              </div>
+           </div>
+        </div>
       </div>
+    </Section>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <div className="h-8 w-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 group-hover:text-white group-hover:bg-white/10 transition-all">
+       <ArrowUpRight size={16} />
     </div>
   );
 }
 
-export function Contact() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.textContent = `
-      @keyframes spin-ring-0 { from { transform: rotateX(75deg) rotateZ(0deg); } to { transform: rotateX(75deg) rotateZ(360deg); } }
-      @keyframes spin-ring-1 { from { transform: rotateX(75deg) rotateZ(60deg); } to { transform: rotateX(75deg) rotateZ(420deg); } }
-      @keyframes spin-ring-2 { from { transform: rotateX(75deg) rotateZ(120deg); } to { transform: rotateX(75deg) rotateZ(480deg); } }
-      @keyframes spin-ring-3 { from { transform: rotateX(30deg) rotateZ(0deg); } to { transform: rotateX(30deg) rotateZ(360deg); } }
-      @keyframes spin-ring-4 { from { transform: rotateX(55deg) rotateZ(45deg); } to { transform: rotateX(55deg) rotateZ(405deg); } }
-      @keyframes spin-meridian { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-    `;
-    document.head.appendChild(style);
-    return () => style.remove();
-  }, []);
-
+function ArrowUpRight({ size }: { size: number }) {
   return (
-    <Section
-      eyebrow="Contact"
-      title="Open to Python backend, Django, and FastAPI roles."
-      description="Best fit for teams hiring backend engineers who build reliable APIs, design PostgreSQL schemas, and deliver production-ready Python services."
-    >
-      <div ref={sectionRef} className="relative">
-        <CSSGlobe />
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.55 }}
-        >
-          <GlassCard className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
-            <div>
-              <h3 className="font-display text-3xl font-semibold text-white">
-                Let us build reliable backend systems.
-              </h3>
-              <p className="mt-4 max-w-2xl leading-8 text-slate-300">
-                Reach out for Python backend developer roles, Django and FastAPI engineering
-                positions, or REST API development opportunities.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {profile.targetRoles.map((role) => (
-                  <span
-                    key={role}
-                    className="rounded-md border border-emeraldSoft/20 bg-emeraldSoft/10 px-3 py-2 text-sm font-semibold text-emeraldSoft"
-                  >
-                    {role}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-3">
-              {profile.contactLinks.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.08] p-4 text-slate-200 transition hover:bg-white/[0.12] hover:text-white"
-                  >
-                    <Icon className="text-emeraldSoft" size={19} aria-hidden="true" />
-                    <span>
-                      <span className="block text-xs uppercase tracking-[0.16em] text-slate-400">
-                        {link.label}
-                      </span>
-                      <span className="block font-semibold">{link.value}</span>
-                    </span>
-                  </a>
-                );
-              })}
-              <a
-                href={`mailto:${profile.email}`}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-emeraldSoft px-5 py-4 text-sm font-bold text-ink transition hover:bg-white"
-              >
-                <Send size={17} aria-hidden="true" /> Send Email
-              </a>
-            </div>
-          </GlassCard>
-        </motion.div>
-      </div>
-    </Section>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 17L17 7M17 7H7M17 7V17" />
+    </svg>
+  );
+}
+
+function MapIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00f5ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
   );
 }
