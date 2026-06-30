@@ -2,18 +2,7 @@ import { useRef, useState, Suspense, lazy } from "react";
 import * as THREE from "three";
 import { motion } from "framer-motion";
 import { WebGLErrorBoundary } from "./WebGLErrorBoundary";
-
-function isWebGLAvailable(): boolean {
-  try {
-    const canvas = document.createElement("canvas");
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
-    );
-  } catch {
-    return false;
-  }
-}
+import { isWebGLAvailable } from "@/lib/utils";
 
 const TorusKnotCanvas = lazy(() =>
   import("./TorusKnotCanvas").then((m) => ({ default: m.TorusKnotCanvas }))

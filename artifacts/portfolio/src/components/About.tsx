@@ -1,8 +1,11 @@
 import { useEffect, useRef, Suspense, lazy } from 'react';
+import { isWebGLAvailable } from '@/lib/utils';
+import { WebGLErrorBoundary } from './three/WebGLErrorBoundary';
 
 const AboutCanvas = lazy(() => import('./three/AboutCanvas').then(m => ({ default: m.AboutCanvas })));
 
 export function About() {
+  const webgl = isWebGLAvailable();
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -59,9 +62,15 @@ export function About() {
           <div className="relative w-full max-w-[500px] aspect-square lg:w-[500px] flex items-center justify-center">
             <div className="absolute inset-0 bg-gradient-to-tr from-[#00ff9d]/10 via-transparent to-[#00f5ff]/10 blur-3xl rounded-full" />
             <div className="relative z-10 w-full h-full">
-              <Suspense fallback={<div className="w-full h-full rounded-full border border-white/5 animate-pulse" />}>
-                <AboutCanvas />
-              </Suspense>
+              {webgl ? (
+                <WebGLErrorBoundary fallback={<div className="w-full h-full rounded-full border border-white/5 bg-white/5" />}>
+                  <Suspense fallback={<div className="w-full h-full rounded-full border border-white/5 animate-pulse" />}>
+                    <AboutCanvas />
+                  </Suspense>
+                </WebGLErrorBoundary>
+              ) : (
+                <div className="w-full h-full rounded-full border border-white/5 bg-white/5" />
+              )}
             </div>
             {/* HUD Elements */}
             <div className="absolute top-0 right-0 border-r border-t border-[#00f5ff]/40 w-12 h-12" />

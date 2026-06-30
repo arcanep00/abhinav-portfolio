@@ -1,4 +1,6 @@
 import { useEffect, useRef, Suspense, lazy } from 'react';
+import { isWebGLAvailable } from '@/lib/utils';
+import { WebGLErrorBoundary } from './three/WebGLErrorBoundary';
 
 const SkillsCanvas = lazy(() => import('./three/SkillsCanvas').then(m => ({ default: m.SkillsCanvas })));
 
@@ -21,6 +23,7 @@ const CATEGORIES = [
 ];
 
 export function Skills() {
+  const webgl = isWebGLAvailable();
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -66,9 +69,15 @@ export function Skills() {
 
           <div className="relative h-[600px] lg:h-[700px] w-full rounded-3xl bg-[#111118]/50 border border-white/5 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00ff9d]/5 to-transparent" />
-            <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">Initializing 3D Clusters...</div>}>
-              <SkillsCanvas />
-            </Suspense>
+            {webgl ? (
+              <WebGLErrorBoundary fallback={<div className="w-full h-full flex items-center justify-center text-slate-500 font-mono text-xs">WebGL Unavailable</div>}>
+                <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">Initializing 3D Clusters...</div>}>
+                  <SkillsCanvas />
+                </Suspense>
+              </WebGLErrorBoundary>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-slate-500 font-mono text-xs">WebGL Unavailable</div>
+            )}
             
             {/* Legend / Info */}
             <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
