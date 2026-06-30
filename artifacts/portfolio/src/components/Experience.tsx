@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Briefcase, Calendar, MapPin, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { NeuralBackground } from './three/NeuralBackground';
 
 const experiences = [
   {
@@ -31,6 +32,7 @@ export function Experience() {
 
   return (
     <section ref={sectionRef} className="relative min-h-screen bg-[#050508] px-6 md:px-20 py-24 overflow-hidden">
+      <NeuralBackground />
       <div className="mx-auto max-w-7xl">
         <p className="reveal text-[#00ff9d] text-xs font-mono tracking-widest mb-4 font-bold uppercase">// TRAJECTORY</p>
         <h2 className="reveal text-5xl font-bold text-white mb-16 leading-tight">

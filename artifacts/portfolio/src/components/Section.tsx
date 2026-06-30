@@ -5,7 +5,7 @@ import { fadeUp } from "@/lib/motion";
 
 type SectionProps = {
   eyebrow?: string;
-  title: string;
+  title: React.ReactNode;
   description?: string;
   children: React.ReactNode;
   className?: string;
