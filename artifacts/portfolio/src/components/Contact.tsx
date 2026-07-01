@@ -1,11 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import { Send, Mail, Linkedin, Github, MessageSquare, Copy, Check, Terminal } from "lucide-react";
 import { profile } from "@/data/profile";
-import { fadeUp } from "@/lib/motion";
-import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
 import React from "react";
 

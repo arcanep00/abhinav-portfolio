@@ -1,33 +1,38 @@
-import { useRef, useMemo } from "react";
+import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { 
-  Float, 
-  Text, 
-  Sphere, 
+import {
+  Float,
+  Text,
+  Sphere,
   MeshDistortMaterial,
-  Environment,
   PerspectiveCamera,
-  ContactShadows
+  ContactShadows,
 } from "@react-three/drei";
 import * as THREE from "three";
 
+// Environment preset="city" suspends on a remote HDRI fetch that never
+// resolves in restricted-network environments — replaced with manual lights.
+// Text font= left empty so Drei uses its built-in default font (no network
+// fetch, no suspension).
+
 const SKILLS = [
-  { name: "Python", color: "#00ff9d", pos: [0, 0, 0], size: 1.2 },
-  { name: "Django", color: "#00f5ff", pos: [-2.5, 1.2, -1], size: 0.8 },
-  { name: "FastAPI", color: "#00ff9d", pos: [2.5, -1.2, -1], size: 0.8 },
-  { name: "PostgreSQL", color: "#a78bfa", pos: [-1.8, -1.8, 0], size: 0.7 },
-  { name: "Redis", color: "#ef4444", pos: [1.8, 1.8, 0], size: 0.6 },
-  { name: "Docker", color: "#00f5ff", pos: [0, 2.5, -2], size: 0.7 },
-  { name: "LLMs", color: "#00ff9d", pos: [0, -2.5, -2], size: 0.9 },
+  { name: "Python",     color: "#00ff9d", pos: [0,    0,    0],  size: 0.45 },
+  { name: "Django",     color: "#00f5ff", pos: [-2.5,  1.2, -1], size: 0.30 },
+  { name: "FastAPI",    color: "#00ff9d", pos: [2.5,  -1.2, -1], size: 0.30 },
+  { name: "PostgreSQL", color: "#a78bfa", pos: [-1.8, -1.8,  0], size: 0.26 },
+  { name: "Redis",      color: "#ef4444", pos: [1.8,   1.8,  0], size: 0.22 },
+  { name: "Docker",     color: "#00f5ff", pos: [0,     2.5, -2], size: 0.26 },
+  { name: "LLMs",       color: "#00ff9d", pos: [0,    -2.5, -2], size: 0.34 },
 ];
 
-function SkillNode({ skill }: { skill: typeof SKILLS[0] }) {
+function SkillNode({ skill }: { skill: (typeof SKILLS)[0] }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  
+
   useFrame((state) => {
     if (!meshRef.current) return;
-    meshRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.5 + skill.pos[0]) * 0.2;
-    meshRef.current.rotation.y = Math.cos(state.clock.getElapsedTime() * 0.5 + skill.pos[1]) * 0.2;
+    const t = state.clock.getElapsedTime();
+    meshRef.current.rotation.x = Math.sin(t * 0.5 + skill.pos[0]) * 0.2;
+    meshRef.current.rotation.y = Math.cos(t * 0.5 + skill.pos[1]) * 0.2;
   });
 
   return (
@@ -45,11 +50,11 @@ function SkillNode({ skill }: { skill: typeof SKILLS[0] }) {
             metalness={0.8}
           />
         </Sphere>
+        {/* No font prop → Drei uses its built-in default (no fetch, no suspend) */}
         <Text
-          position={[0, -skill.size - 0.4, 0]}
-          fontSize={0.25}
+          position={[0, -skill.size - 0.15, 0]}
+          fontSize={0.18}
           color="white"
-          font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff"
           anchorX="center"
           anchorY="middle"
         >
@@ -64,10 +69,20 @@ export function SkillsCanvas() {
   return (
     <Canvas shadows dpr={[1, 2]}>
       <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={40} />
-      <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-      <pointLight position={[-10, -10, -10]} color="#00ff9d" intensity={0.5} />
-      
+
+      {/* Replaces Environment preset="city" — same brightness/colour balance,
+          no remote HDRI fetch, no Suspense stall */}
+      <ambientLight intensity={0.6} />
+      <spotLight
+        position={[10, 10, 10]}
+        angle={0.15}
+        penumbra={1}
+        intensity={1.5}
+        castShadow
+      />
+      <pointLight position={[-10, -10, -10]} color="#00ff9d" intensity={0.8} />
+      <pointLight position={[10, -5, 5]} color="#00f5ff" intensity={0.4} />
+
       <group position={[0, 0, 0]}>
         {SKILLS.map((skill) => (
           <SkillNode key={skill.name} skill={skill} />
@@ -81,7 +96,6 @@ export function SkillsCanvas() {
         blur={2}
         far={5}
       />
-      <Environment preset="city" />
     </Canvas>
   );
 }

@@ -1,12 +1,10 @@
 "use client";
 import { NeuralBackground } from "./three/NeuralBackground";
-import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, ExternalLink, Github, Terminal, Layers, Database } from "lucide-react";
+import { useState } from "react";
+import { ArrowUpRight, ExternalLink, Github, Terminal } from "lucide-react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { projects } from "@/data/projects";
-import { fadeUp } from "@/lib/motion";
-import { GlassCard } from "./GlassCard";
 import { Section } from "./Section";
 
 export function Projects() {
@@ -19,7 +17,7 @@ export function Projects() {
       title="Production-grade systems."
       description="Exploring the intersection of scalable backend architecture, AI-driven automation, and enterprise-grade Python development."
     >
-            
+      <NeuralBackground />
       <div id="projects-grid" className="grid lg:grid-cols-[1fr_400px] gap-8">
         <div className="relative">
           <AnimatePresence mode="wait">
